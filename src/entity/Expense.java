@@ -1,10 +1,12 @@
 package entity;
 
+import java.time.LocalDate;
+
 public class Expense {
     private int id;
     private int amount;
     private String date;
-    private String category;
+    private int category;
     private String description;
     private static int lastIndex = 0;
 
@@ -12,10 +14,10 @@ public class Expense {
         lastIndex++;
     }
 
-    public Expense(int amount, String date, String category, String description) {
+    public Expense(int amount, LocalDate date, int category, String description) {
         this.id = lastIndex;
         this.amount = amount;
-        this.date = date;
+        this.date = String.valueOf(date);
         this.category = category;
         this.description = description;
     }
@@ -44,11 +46,11 @@ public class Expense {
         this.date = date;
     }
 
-    public String getCategory() {
+    public Integer getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(int category) {
         this.category = category;
     }
 
@@ -58,5 +60,16 @@ public class Expense {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public String toString() {
+        return "Expense{" +
+                "id=" + id +
+                ", amount=" + amount +
+                ", date='" + date + '\'' +
+                ", category=" + category +
+                ", description='" + description + '\'' +
+                '}';
     }
 }

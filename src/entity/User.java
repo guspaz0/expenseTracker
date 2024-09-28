@@ -60,4 +60,13 @@ public class User {
     public void setExpenses(List<Expense> expenses) {
         this.expenses = expenses;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", expenses=" + expenses +
+                '}';
+    }
 }
