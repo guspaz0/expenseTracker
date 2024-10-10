@@ -9,9 +9,10 @@ public class User {
     private String email;
     private List<Expense> expenses;
 
-    public User(String name, String email) {
+    public User(String name, String email, List<Expense> expenses) {
         this.name = name;
         this.email = email;
+        this.expenses = expenses;
     }
 
     public void addExpense(Expense expense){
