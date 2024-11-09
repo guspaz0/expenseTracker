@@ -9,6 +9,7 @@ public class User {
     private String email;
     private List<Expense> expenses;
 
+    public User(){};
     public User(String name, String email, List<Expense> expenses) {
         this.name = name;
         this.email = email;
@@ -67,7 +68,6 @@ public class User {
         return "User{" +
                 "name='" + name + '\'' +
                 ", email='" + email + '\'' +
-                ", expenses=" + expenses +
-                '}';
+                ", expenses=" + expenses + '}';
     }
 }

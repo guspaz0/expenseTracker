@@ -1,0 +1,14 @@
+services:
+  db-expenses:
+    container_name: db-expense-tracker
+    build:
+      dockerfile: ./Dockerfile
+      context: ./
+    image: h2-alpine
+    volumes:
+      - E:/h2/db_expenses:/opt/h2-data/db_expenses
+    ports:
+      - 81:81
+      - 1521:1521
+    environment:
+      H2_OPTIONS: -ifNotExists
