@@ -1,0 +1,28 @@
+package dao.dto;
+
+public class categoryDto {
+    private String name;
+    private String description;
+
+    public categoryDto(){};
+
+    public categoryDto(String name, String description){
+        this.name = name;
+        this.description = description;
+    }
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+}

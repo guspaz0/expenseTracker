@@ -1,43 +1,23 @@
 package entity;
 
-import exceptions.ExpenseNotFoundException;
+import exceptions.expenseNotFoundException;
 
 import java.util.List;
 
 public class User {
+    private int id;
     private String name;
     private String email;
-    private List<Expense> expenses;
 
     public User(){};
-    public User(String name, String email, List<Expense> expenses) {
+    public User(String name, String email) {
         this.name = name;
         this.email = email;
-        this.expenses = expenses;
     }
 
-    public void addExpense(Expense expense){
-        this.expenses.add(expense);
-    }
-    public void removeExpense(Expense expense) {
-        this.expenses.removeIf(expens -> expens.getId() == expense.getId());
-    }
-    public void updateExpense(Expense expense) throws ExpenseNotFoundException {
-        try {
-            for (Expense expens : this.expenses) {
-                if (expens.getId() == expense.getId()) {
-                    expens.setAmount(expense.getAmount());
-                    expens.setDate(expense.getDate());
-                    expens.setCategory(expense.getCategory());
-                    expens.setDescription(expense.getDescription());
-                    break;
-                }
-            }
-            throw new ExpenseNotFoundException("No se encontro la expensa");
-        } catch(ExpenseNotFoundException e) {
-            System.out.println(e.getMessage());
-        }
-    }
+    public int getId(){return id;}
+
+    public void setId(int id){ this.id = id;}
 
     public String getName() {
         return name;
@@ -55,19 +35,13 @@ public class User {
         this.email = email;
     }
 
-    public List<Expense> getExpenses() {
-        return expenses;
-    }
-
-    public void setExpenses(List<Expense> expenses) {
-        this.expenses = expenses;
-    }
 
     @Override
     public String toString() {
         return "User{" +
-                "name='" + name + '\'' +
+                "id='" + id +'\'' +
+                ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
-                ", expenses=" + expenses + '}';
+                '}';
     }
 }

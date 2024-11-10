@@ -1,48 +1,42 @@
 package entity;
 
-import java.time.LocalDate;
+import java.sql.Date;
 
 public class Expense {
     private int id;
-    private int amount;
-    private String date;
+    private double amount;
+    private Date date;
     private int category;
     private String description;
-    private static int lastIndex = 0;
 
-    public Expense() {
-        lastIndex++;
-    }
+    public Expense() {}
 
-    public Expense(int amount, LocalDate date, int category, String description) {
-        this.id = lastIndex;
+    public Expense(double amount, Date date, int category, String description) {
         this.amount = amount;
-        this.date = String.valueOf(date);
+        this.date = date;
         this.category = category;
         this.description = description;
     }
 
-    public static int getLastIndex() {
-        return lastIndex;
-    }
+    public void setId(int id) {this.id = id;}
 
     public int getId() {
         return id;
     }
 
-    public int getAmount() {
+    public Double getAmount() {
         return amount;
     }
 
-    public void setAmount(int amount) {
+    public void setAmount(Double amount) {
         this.amount = amount;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 

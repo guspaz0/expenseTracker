@@ -9,28 +9,36 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import db.jdbcConfiguration;
+import db.impl.jdbcConfigH2;
+import db.dbConnection;
 import dao.dto.userDto;
+import exceptions.categoryNotFoundException;
+import exceptions.expenseNotFoundException;
+import exceptions.userEmailRepeatedException;
+import exceptions.userNotFoundException;
+import org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException;
 
 
 public class userDaoImplH2 implements userDao {
 
+    dbConnection dbConnection = new jdbcConfigH2();
     private final Connection connection;
 
     public userDaoImplH2(){
-        this.connection = jdbcConfiguration.getConnection();
+        this.connection = dbConnection.getConnection();
     }
 
     @Override
-    public List<User> getAllUsers() {
+    public List<User> findAll() {
         try {
             List<User> lista = new ArrayList<>();
             PreparedStatement ps = connection.prepareStatement("SELECT * FROM USERS");
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 User usr = new User();
-                usr.setName(rs.getString("name"));
-                usr.setEmail(rs.getString("email"));
+                usr.setId(rs.getInt("ID"));
+                usr.setName(rs.getString("NAME"));
+                usr.setEmail(rs.getString("EMAIL"));
                 lista.add(usr);
             }
             rs.close();
@@ -50,20 +58,25 @@ public class userDaoImplH2 implements userDao {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
+                user.setId(rs.getInt("ID"));
                 user.setName(rs.getString("NAME"));
                 user.setEmail(rs.getString("EMAIL"));
+                rs.close();
+                ps.close();
                 return user;
             } else {
-                throw new SQLException();
+                throw new userNotFoundException("user id "+ id +" not found");
             }
-        } catch (SQLException e) {
-            System.out.println(e);
+        } catch (Exception e) {
+            if (e instanceof userNotFoundException) {
+                throw new userNotFoundException(e.getMessage());
+            } else System.out.println(String.valueOf(e));;
             return null;
         }
     }
 
     @Override
-    public void registerUser(userDto userDto) {
+    public void create(userDto userDto) throws userEmailRepeatedException {
         try {
             User newUser = new User();
             newUser.setName(userDto.getName());
@@ -75,18 +88,38 @@ public class userDaoImplH2 implements userDao {
             ps.setString(2,newUser.getEmail());
             ps.executeUpdate();
             ps.close();
-        } catch( SQLException e) {
-            System.out.println(String.valueOf(e));
+        } catch(Exception e) {
+            if (e instanceof JdbcSQLIntegrityConstraintViolationException) {
+                throw new userEmailRepeatedException("the email "+ userDto.getEmail() +" already exists");
+            } else System.out.println(String.valueOf(e));
         }
     }
 
     @Override
-    public void updateUser(User persona) {
+    public void update(User user) {
+        try {
+            PreparedStatement ps=connection.prepareStatement("UPDATE USERS SET NAME=?, EMAIL=? WHERE ID=?");
+            ps.setString(1,user.getName());
+            ps.setString(2,user.getEmail());
+            ps.setInt(3,user.getId());
+            ps.executeUpdate();
+            ps.close();
+        } catch(SQLException e) {
+            System.out.println(String.valueOf(e));
+        }
 
     }
 
     @Override
-    public void deleteUser(int id) {
-
+    public void delete(int id) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("DELETE FROM USERS WHERE ID = ?");
+            ps.setInt(1, id);
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(String.valueOf(e));
+        }
     }
+
 }

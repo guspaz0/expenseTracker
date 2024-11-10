@@ -4,17 +4,15 @@ public class Category {
     private int id;
     private String name;
     private String description;
-    private static int lastindex = 0;
 
-    public Category() {
-        lastindex++;
-    }
+    public Category(){}
 
     public Category(String name, String description) {
-        this.id = lastindex++;
         this.name = name;
         this.description = description;
     }
+
+    public void setId(int id) {this.id = id;}
 
     public int getId() {
         return id;
