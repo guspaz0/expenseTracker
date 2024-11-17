@@ -1,9 +1,5 @@
 package entity;
 
-import exceptions.expenseNotFoundException;
-
-import java.util.List;
-
 public class User {
     private int id;
     private String name;

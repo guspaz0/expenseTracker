@@ -9,7 +9,7 @@ import java.sql.SQLException;
 public class jdbcConfigH2 implements dbConnection {
 
     private static final String DB_DRIVER = "org.h2.Driver";
-    private static final String DB_CONNECTION = "jdbc:h2:tcp://localhost:1521/db_expenses";
+    private static final String DB_CONNECTION = "jdbc:h2:tcp://localhost:1521/db_expenses;INIT=RUNSCRIPT FROM 'db_expenses.sql'";
 
 
     public Connection getConnection() {
@@ -18,8 +18,7 @@ public class jdbcConfigH2 implements dbConnection {
             Class.forName(DB_DRIVER);
             connection = DriverManager.getConnection(DB_CONNECTION, "sa", "test");
         } catch (SQLException | ClassNotFoundException ex) {
-            //throw new RuntimeException(ex);
-            //System.out.println(String.valueOf(ex));
+            System.out.println(String.valueOf(ex));
         }
         return connection;
     }
