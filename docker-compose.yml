@@ -6,7 +6,7 @@ services:
       context: ./
     image: h2-alpine
     volumes:
-      - E:/h2/db_expenses:/opt/h2-data/db_expenses
+     - ${SRC_DIRECTORY}/db_expenses.sql:/opt/h2-data/db_expenses.sql
     ports:
       - 81:81
       - 1521:1521

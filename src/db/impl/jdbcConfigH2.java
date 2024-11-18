@@ -9,7 +9,7 @@ import java.sql.SQLException;
 public class jdbcConfigH2 implements dbConnection {
 
     private static final String DB_DRIVER = "org.h2.Driver";
-    private static final String DB_CONNECTION = "jdbc:h2:tcp://localhost:1521/db_expenses;INIT=RUNSCRIPT FROM 'db_expenses.sql'";
+    private static final String DB_CONNECTION = "jdbc:h2:tcp://localhost:1521/db_expenses;INIT=RUNSCRIPT FROM '/opt/h2-data/db_expenses.sql'";
 
 
     public Connection getConnection() {
