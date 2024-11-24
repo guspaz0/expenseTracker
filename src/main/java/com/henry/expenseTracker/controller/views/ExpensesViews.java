@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,7 +32,7 @@ public class ExpensesViews {
             List<Category> categoryList = categoryService.findAll();
             model.addAttribute("supplierList",supplierList);
             model.addAttribute("categoryList", categoryList);
-            return "registerExpense";
+            return "formExpense";
         } else {
             return "redirect:/login";
         }
@@ -42,18 +43,22 @@ public class ExpensesViews {
                                @CookieValue(value="userid") String userid,
                                @RequestParam("description") String description,
                                @RequestParam("emit_date") String emit_date,
-                               @RequestParam("supplier_id") String supplier_id,
-                               @RequestParam("category_id") String category_id,
+                               @RequestParam("supplier") String supplier,
+                               @RequestParam("category") String category,
                                @RequestParam("expiration") String expiration,
                                @RequestParam("amount") String amount
                                ) {
         String result;
-        Expense expense = null;
+        Expense expense = new Expense();
+        expense.setAmount(Double.parseDouble(amount));
+        expense.setDescription(description);
+        expense.setDate(Date.valueOf(emit_date));
 
         if(expense == null) {
+            model.addAttribute("");
             model.addAttribute("errorValidation","Error in form. check input fields");
             result = "formExpense";
-        }else {
+        } else {
 
             result = "redirect:/user/dashboard";
         }

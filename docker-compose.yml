@@ -10,5 +10,5 @@ services:
     ports:
       - 81:81
       - 1521:1521
-    #environment:
-    #  H2_OPTIONS: -ifNotExists
+    environment:
+      H2_OPTIONS: -ifNotExists

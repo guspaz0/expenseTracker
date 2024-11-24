@@ -34,6 +34,12 @@
 </main>
 <aside th:fragment="sidebar" class="sidebar">
   <ul>
+    <li>Expense
+      <ul>
+        <li><a th:href="@{/user/dashboard}">List all</a></li>
+        <li><a th:href="@{/expense/register}">New</a></li>
+      </ul>
+    </li>
     <li>Suppliers
       <ul>
         <li><a th:href="@{/supplier}">List all</a></li>
@@ -52,6 +58,7 @@
         <li><a th:href="@{/categories/register}">New</a></li>
       </ul>
     </li>
+
   </ul>
 </aside>
 
