@@ -1,1 +1,0 @@
-java -cp "/opt/h2/bin/h2-2.2.224.jar" org.h2.tools.RunScript -url jdbc:h2:~/db_expenses -user sa -script db_expenses.sql

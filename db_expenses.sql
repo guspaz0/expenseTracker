@@ -1,4 +1,3 @@
-DROP TABLE IF EXISTS expense_category;
 DROP TABLE IF EXISTS EXPIRATION_PAYMENTS;
 DROP TABLE IF EXISTS PAYMENTS;
 DROP TABLE IF EXISTS EXPIRATIONS;
@@ -9,7 +8,8 @@ DROP TABLE IF EXISTS users;
 create table users(
 	id int primary key auto_increment,
 	name varchar(50) not null,
-	email varchar(50) NOT NULL
+	email varchar(50) NOT NULL,
+	password varchar(255) NOT null
 );
 
 DROP TABLE IF EXISTS category;
@@ -44,18 +44,12 @@ create table expenses(
 	EMIT_DATE date NOT NULL DEFAULT(CURRENT_DATE),
 	id_supplier int NOT NULL,
 	id_user int NOT NULL,
+	id_category int NOT NULL,
 	expires int DEFAULT 0,
 	FOREIGN KEY(id_supplier) REFERENCES SUPPLIERS(id),
 	FOREIGN KEY(id_user) REFERENCES USERS(id),
+	FOREIGN key(id_category) references category(id),
 	check(expires = 1 OR expires = 0)
-);
-
-
-create table expense_category(
-	id_category int not null,
-	id_expense int not null,
-	foreign key(id_expense) references expenses(id),
-	foreign key(id_category) references category(id)
 );
 
 
@@ -80,8 +74,8 @@ CREATE TABLE EXPIRATION_PAYMENTS(
 	check(part_expiration <= 1 AND part_payment <= 1 AND part_expiration > 0 AND part_payment > 0)
 );
 
-INSERT INTO USERS (NAME,email) VALUES
-('Gustavo Paz', 'gusti.paz@gmail.com');
+INSERT INTO USERS (NAME,email, PASSWORD) VALUES
+('Gustavo Paz', 'gusti.paz@gmail.com', '1234');
 
 INSERT INTO SUPPLIERS(ID, NAME) VALUES
 ('1','EDESE SA'),
@@ -95,21 +89,13 @@ INSERT INTO CATEGORY VALUES
 ('1','Bienes basicos','Productos basicos tangibles como por ejemplo ropa, comida'),
 ('2','Servicios basicos','Servicios de basicos por ejemplo agua, electricidad, gas, telefonia, etc.');
 
-INSERT INTO expenses(DESCRIPTION, EMIT_DATE, AMOUNT,ID_USER, ID_SUPPLIER, EXPIRES) VALUES
-('factura de Electricidad periodo de agosto 2024','2024-10-24',100,1,'1',1),
-('factura de Gas periodo de agosto 2024','2024-09-28',150,1,'2',0),
-('factura de Telefonia movil periodo de agosto 2024','2024-08-03',300,1,'3',0),
-('factura de comida','2024-09-15',1150,1,'4',0),
-('factura de ropa','2024-08-26',2300,1,'5',0),
-('factura de universidad','2024-10-12',5000,1,'6',0);
-
-INSERT INTO EXPENSE_CATEGORY VALUES
-('2','1'),
-('2','2'),
-('2','3'),
-('1','4'),
-('1','5'),
-('2','6');
+INSERT INTO expenses(DESCRIPTION, EMIT_DATE, AMOUNT,ID_USER, ID_SUPPLIER,ID_CATEGORY, EXPIRES) VALUES
+('factura de Electricidad periodo de agosto 2024','2024-10-24',100,1,'1','2',1),
+('factura de Gas periodo de agosto 2024','2024-09-28',150,1,'2','2',0),
+('factura de Telefonia movil periodo de agosto 2024','2024-08-03',300,1,'3','2',0),
+('factura de comida','2024-09-15',1150,1,'4','1',0),
+('factura de ropa','2024-08-26',2300,1,'5','1',0),
+('factura de universidad','2024-10-12',5000,1,'6','2',0);
 
 INSERT INTO EXPIRATIONS(ID_EXPENSE, EXPIRATION, PARTICIPATION) VALUES
 ('1','2024-11-30',0.5),

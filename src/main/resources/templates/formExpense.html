@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <th:block th:insert="~{fragments/general.html :: headerfiles}"></th:block>
+</head>
+<body>
+<header th:replace="~{fragments/general.html :: header(username=${username})}"></header>
+<hr>
+<nav th:replace="~{fragments/general.html :: navbar}"></nav>
+<main class="container">
+    <div th:replace="~{fragments/general.html :: sidebar}"></div>
+    <div class="main">
+        <h2>Create Expense...</h2>
+        <form class="registerUser" action="/expense/register" method="POST">
+            <label for="description">Description</label>
+            <input id="description" type="text" name="description" th:value="${description}"/>
+            <label for="emit_date">Emit date</label>
+            <input id="emit_date" type="date" name="emit_date" th:value="${emit_date}"/>
+            <label for="Amount">Amount</label>
+            <input id="Amount" type="number" name="Amount" th:value="${Amount}"/>
+            <label for="supplier">Supplier</label>
+            <select id="supplier" name="supplier">
+                <option th:each="supplier : ${supplierList}" value="${supplier.id}" selected="${supplier.id == supplier}" th:text="${supplier.name}"></option>
+            </select>
+            <label for="category">Category</label>
+            <select id="category" name="category">
+                <option th:each="category : ${categoryList}" value="${category.id}" selected="${category.id == category}" th:text="${category.name}"></option>
+            </select>
+            <p th:if="${errorRegister}">
+                <small class="errorValidation" th:text="${errorRegister}"></small>
+            </p>
+            <label for="expires">Expires
+                <input id="expires" type="checkbox" name="expires"/>
+            </label>
+            <input type="submit">
+        </form>
+    </div>
+</main>
+<div th:replace="~{fragments/general.html :: footer}"></div>
+</body>
+</html>
