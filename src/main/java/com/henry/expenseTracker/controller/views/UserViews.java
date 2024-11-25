@@ -2,8 +2,7 @@ package com.henry.expenseTracker.controller.views;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.henry.expenseTracker.dao.dto.ExpenseRelationsDto;
-import com.henry.expenseTracker.entity.Expense;
+import com.henry.expenseTracker.dao.dto.ExpenseResponseDto;
 import com.henry.expenseTracker.entity.User;
 import com.henry.expenseTracker.service.impl.ExpenseService;
 import com.henry.expenseTracker.service.impl.UserService;
@@ -53,7 +52,7 @@ public class UserViews {
         Optional<User> user = userService.findByPk(Integer.parseInt(userid));
         if (user.isPresent()) {
             model.addAttribute("username", user.get().getName());
-            List<ExpenseRelationsDto> expenseList = expenseService.findAllRelationsByUser(user.get().getId());
+            List<ExpenseResponseDto> expenseList = expenseService.findAllRelationsByUser(user.get().getId());
             System.out.println(expenseList);
             model.addAttribute("expenses", expenseList);
             return "dashboard";

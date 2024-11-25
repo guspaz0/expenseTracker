@@ -1,12 +1,10 @@
 package com.henry.expenseTracker.service.impl;
 
 import com.henry.expenseTracker.dao.IDao;
-import com.henry.expenseTracker.dao.dto.ExpenseRelationsDto;
+import com.henry.expenseTracker.dao.dto.ExpenseResponseDto;
 import com.henry.expenseTracker.dao.expenseIDao;
 import com.henry.expenseTracker.dao.impl.expenseDaoH2;
-import com.henry.expenseTracker.entity.Category;
 import com.henry.expenseTracker.entity.Expense;
-import com.henry.expenseTracker.entity.User;
 import com.henry.expenseTracker.service.IService;
 import org.springframework.stereotype.Service;
 
@@ -52,7 +50,7 @@ public class ExpenseService implements IService<Expense> {
         return expenseIDao.findAllRelations();
     }
 
-    public List<ExpenseRelationsDto> findAllRelationsByUser(int id) {
+    public List<ExpenseResponseDto> findAllRelationsByUser(int id) {
         return expenseIDao.findAllRelationsByUser(id);
     }
 }

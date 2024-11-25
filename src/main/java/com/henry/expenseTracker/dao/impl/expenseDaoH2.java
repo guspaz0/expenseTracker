@@ -1,7 +1,7 @@
 package com.henry.expenseTracker.dao.impl;
 
 import com.henry.expenseTracker.dao.IDao;
-import com.henry.expenseTracker.dao.dto.ExpenseRelationsDto;
+import com.henry.expenseTracker.dao.dto.ExpenseResponseDto;
 import com.henry.expenseTracker.dao.expenseIDao;
 import com.henry.expenseTracker.db.dbConnection;
 import com.henry.expenseTracker.db.impl.jdbcConfigH2;
@@ -10,14 +10,10 @@ import com.henry.expenseTracker.entity.Expense;
 import com.henry.expenseTracker.entity.Expiration;
 import com.henry.expenseTracker.entity.Supplier;
 
-import javax.crypto.spec.PSource;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-
-import static com.fasterxml.jackson.databind.type.LogicalType.Map;
 
 public class expenseDaoH2 implements IDao<Expense>, expenseIDao {
     private dbConnection dbConnection;
@@ -131,15 +127,15 @@ public class expenseDaoH2 implements IDao<Expense>, expenseIDao {
     }
 
     @Override
-    public List<ExpenseRelationsDto> findAllRelationsByUser(int id) {
+    public List<ExpenseResponseDto> findAllRelationsByUser(int id) {
         Connection connection = dbConnection.getConnection();
-        List<ExpenseRelationsDto> expenseList = new ArrayList<>();
+        List<ExpenseResponseDto> expenseList = new ArrayList<>();
         try {
             PreparedStatement ps = connection.prepareStatement(FIND_ALL_RELATIONS_BY_USER);
             ps.setInt(1,id);
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
-                ExpenseRelationsDto expense = createExpenseRelationsObject(rs);
+                ExpenseResponseDto expense = createExpenseRelationsObject(rs);
                 expenseList.add(expense);
             }
             rs.close();
@@ -198,8 +194,8 @@ public class expenseDaoH2 implements IDao<Expense>, expenseIDao {
             e.printStackTrace();
         }
     }
-    private ExpenseRelationsDto createExpenseRelationsObject(ResultSet rs) throws SQLException {
-        ExpenseRelationsDto obj = new ExpenseRelationsDto();
+    private ExpenseResponseDto createExpenseRelationsObject(ResultSet rs) throws SQLException {
+        ExpenseResponseDto obj = new ExpenseResponseDto();
         obj.setId(rs.getInt("ID"));
         obj.setDate(rs.getDate("EMIT_DATE"));
         obj.setAmount(rs.getDouble("AMOUNT"));

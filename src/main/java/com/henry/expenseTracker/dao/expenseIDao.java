@@ -1,6 +1,6 @@
 package com.henry.expenseTracker.dao;
 
-import com.henry.expenseTracker.dao.dto.ExpenseRelationsDto;
+import com.henry.expenseTracker.dao.dto.ExpenseResponseDto;
 import com.henry.expenseTracker.entity.Expense;
 import com.henry.expenseTracker.entity.Expiration;
 
@@ -15,7 +15,7 @@ public interface expenseIDao {
      * List of expenses with all relationships included in database and belongs to the User
      * @param id Pk identifier of User in database
      */
-    List<ExpenseRelationsDto> findAllRelationsByUser(int id);
+    List<ExpenseResponseDto> findAllRelationsByUser(int id);
 
     /**
      * Add expense category

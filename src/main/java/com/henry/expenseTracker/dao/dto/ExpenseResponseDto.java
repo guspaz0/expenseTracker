@@ -8,7 +8,7 @@ import com.henry.expenseTracker.entity.User;
 import java.sql.Date;
 import java.util.List;
 
-public class ExpenseRelationsDto {
+public class ExpenseResponseDto {
     private int id;
     private String description;
     private double amount;
@@ -18,7 +18,7 @@ public class ExpenseRelationsDto {
     private Supplier supplier;
     private User user;
 
-    public ExpenseRelationsDto(){}
+    public ExpenseResponseDto(){}
 
     public int getId() {
         return id;

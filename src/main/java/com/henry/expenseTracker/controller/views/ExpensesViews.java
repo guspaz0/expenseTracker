@@ -1,5 +1,7 @@
 package com.henry.expenseTracker.controller.views;
 
+import com.henry.expenseTracker.controller.views.Dto.ExpenseRequestDto;
+import com.henry.expenseTracker.dao.dto.ExpenseResponseDto;
 import com.henry.expenseTracker.entity.Category;
 import com.henry.expenseTracker.entity.Expense;
 import com.henry.expenseTracker.entity.Supplier;
@@ -48,20 +50,29 @@ public class ExpensesViews {
                                @RequestParam("expiration") String expiration,
                                @RequestParam("amount") String amount
                                ) {
-        String result;
-        Expense expense = new Expense();
-        expense.setAmount(Double.parseDouble(amount));
-        expense.setDescription(description);
-        expense.setDate(Date.valueOf(emit_date));
+        Optional<User> user = userService.findByPk(Integer.parseInt(userid));
+        if (user.isPresent()) {
+            String result;
+            ExpenseRequestDto expense = new ExpenseRequestDto();
+            expense.setAmount(Double.parseDouble(amount));
+            expense.setDescription(description);
+            expense.setDate(Date.valueOf(emit_date));
+            expense.setSupplier_id(Integer.parseInt(supplier));
+            expense.setCategory(Integer.parseInt(category));
 
-        if(expense == null) {
-            model.addAttribute("");
-            model.addAttribute("errorValidation","Error in form. check input fields");
-            result = "formExpense";
+
+            if(expense == null) {
+                model.addAttribute("");
+                model.addAttribute("errorValidation","Error in form. check input fields");
+                result = "formExpense";
+            } else {
+
+                result = "redirect:/user/dashboard";
+            }
+            return result;
         } else {
-
-            result = "redirect:/user/dashboard";
+            return "redirect:/login";
         }
-        return result;
+
     }
 }
