@@ -12,7 +12,8 @@ public class ExpenseRequestDto {
     private String description;
     private double amount;
     private Date date;
-    private int category;
+    private int category_id;
+    private int expires;
     private List<ExpirationRequestDto> expirations;
     private int supplier_id;
     private int user_id;
@@ -23,9 +24,17 @@ public class ExpenseRequestDto {
         this.description = description;
         this.amount = amount;
         this.date = date;
-        this.category = category;
+        this.category_id = category;
         this.supplier_id = supplier_id;
         this.user_id = user_id;
+    }
+
+    public int getExpires() {
+        return expires;
+    }
+
+    public void setExpires(int expires) {
+        this.expires = expires;
     }
 
     public String getDescription() {
@@ -52,12 +61,12 @@ public class ExpenseRequestDto {
         this.date = date;
     }
 
-    public int getCategory() {
-        return category;
+    public int getCategory_id() {
+        return category_id;
     }
 
-    public void setCategory(int category) {
-        this.category = category;
+    public void setCategory_id(int category) {
+        this.category_id = category;
     }
 
     public List<ExpirationRequestDto> getExpirations() {

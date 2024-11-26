@@ -13,11 +13,12 @@ import com.henry.expenseTracker.db.dbConnection;
 
 
 public class userDaoH2 implements IDao<User> {
-    private dbConnection dbConnection;
+    private final dbConnection dbConnection;
 
     public userDaoH2(){
         this.dbConnection = new jdbcConfigH2();
     }
+
     private static final String FIND_ALL = "SELECT * FROM USERS";
     private static final String FIND_BY_PK = "SELECT * FROM USERS WHERE ID = '%s'";
     private static final String INSERT = "INSERT INTO USERS(NAME,EMAIL,PASSWORD) VALUES('%s','%s','%s')";
@@ -72,17 +73,19 @@ public class userDaoH2 implements IDao<User> {
             stmt.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
             ResultSet keys = stmt.getGeneratedKeys();
             if (keys.next()) {
-                user.setId(keys.getInt(1));
+                int id = keys.getInt(1);
+                System.out.println(id);
+                user.setId(id);
             }
             stmt.close();
-            keys.close();
             connection.close();
-        } catch(Exception e) {
+        } catch(SQLException e) {
 //            if (e instanceof JdbcSQLIntegrityConstraintViolationException) {
 //                throw new userEmailRepeatedException("the email "+ userDto.getEmail() +" already exists");
 //            } else System.out.println(String.valueOf(e));
             e.printStackTrace();
         }
+        System.out.println(user);
         return user;
     }
 

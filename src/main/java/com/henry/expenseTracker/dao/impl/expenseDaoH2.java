@@ -1,5 +1,7 @@
 package com.henry.expenseTracker.dao.impl;
 
+import com.henry.expenseTracker.controller.views.Dto.ExpenseRequestDto;
+import com.henry.expenseTracker.controller.views.Dto.ExpenseRequestUpdateDto;
 import com.henry.expenseTracker.dao.IDao;
 import com.henry.expenseTracker.dao.dto.ExpenseResponseDto;
 import com.henry.expenseTracker.dao.expenseIDao;
@@ -15,23 +17,35 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class expenseDaoH2 implements IDao<Expense>, expenseIDao {
+public class expenseDaoH2 implements expenseIDao, IDao<Expense> {
     private dbConnection dbConnection;
 
     public expenseDaoH2(){
         this.dbConnection = new jdbcConfigH2();
     }
     public expenseDaoH2(dbConnection dbConnection){
+
         this.dbConnection = dbConnection;
     }
 
     private final static String FIND_ALL = "SELECT * FROM EXPENSES";
     private final static String FIND_BY_PK = "SELECT * FROM EXPENSES WHERE ID = ?";
-    private final static String CREATE = "INSERT INTO EXPENSES (AMOUNT, DATE, DESCRIPTION) VALUES ('%s', '%s', '%s')";
-    private final static String UPDATE = "UPDATE EXPENSES SET AMOUNT = '%s', DATE = '%s', DESCRIPTION = '%s' WHERE ID = '%s'";
+    private final static String CREATE = "INSERT INTO EXPENSES (DESCRIPTION, EMIT_DATE, AMOUNT, ID_USER, ID_SUPPLIER, ID_CATEGORY, EXPIRES) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s')";
+    private final static String UPDATE = "UPDATE EXPENSES SET DATE = '%s', DESCRIPTION = '%s', ID_CATEGORY = '%' WHERE ID = '%s'";
     private final static String DELETE = "DELETE FROM EXPENSES WHERE ID = '%s'";
-    private static final String ADD_CATEGORY = "INSERT INTO EXPENSE_CATEGORY(ID_CATEGORY, ID_EXPENSE) VALUES ('%s','%s')";
-    private static final String REMOVE_CATEGORY = "DELETE FROM EXPENSE_CATEGORY WHERE ID_CATEGORY = '%s' AND ID_EXPENSE = '%s'";
+    private final static String FIND_BY_PK_ALL_RELATIONS = "SELECT e.id AS ID, e.EMIT_DATE AS EMIT_DATE, e.DESCRIPTION AS DESCRIPTION, e.AMOUNT AS AMOUNT, "+
+            "CASE "+
+            "WHEN e.expires = 1 THEN ARRAY_AGG(DISTINCT ARRAY[e2.id::TEXT,e2.EXPIRATION::TEXT, e2.PARTICIPATION::TEXT]) "+
+            "ELSE null "+
+            "END AS EXPIRATIONS, "+
+            "ARRAY[s.ID::text,s.NAME] AS SUPPLIER, "+
+            "ARRAY[c.id::text, c.name] AS CATEGORY "+
+            "FROM EXPENSES E "+
+            "LEFT JOIN CATEGORY C ON C.ID = E.ID_CATEGORY "+
+            "LEFT JOIN SUPPLIERS s ON s.ID = e.ID_SUPPLIER "+
+            "LEFT JOIN EXPIRATIONS e2 ON e2.ID_EXPENSE = e.id "+
+            "WHERE e.ID = ? "+
+            "GROUP BY e.id,e2.id_expense";
     private final static String FIND_ALL_RELATIONS_BY_USER = "SELECT e.id AS ID, e.EMIT_DATE AS EMIT_DATE, e.DESCRIPTION AS DESCRIPTION, e.AMOUNT AS AMOUNT, "+
     "CASE "+
     "WHEN e.expires = 1 THEN ARRAY_AGG(DISTINCT ARRAY[e2.id::TEXT,e2.EXPIRATION::TEXT, e2.PARTICIPATION::TEXT]) "+
@@ -88,14 +102,24 @@ public class expenseDaoH2 implements IDao<Expense>, expenseIDao {
     @Override
     public Expense save(Expense expense) {
         Connection connection = dbConnection.getConnection();
+        Optional<Expense> response = null;
         Statement stmt = null;
-        String query = String.format(CREATE, expense.getAmount(), expense.getDate(), expense.getDescription());
+        String query = String.format(CREATE,
+                expense.getDescription(),
+                expense.getEmit_date(),
+                expense.getAmount(),
+                expense.getUser_id(),
+                expense.getSupplier_id(),
+                expense.getCategory_id(),
+                expense.getExpires()
+                );
         try {
             stmt = connection.createStatement();
             stmt.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
             ResultSet keys = stmt.getGeneratedKeys();
             if (keys.next()) {
-                expense.setId(keys.getInt(1));
+                int id = keys.getInt(1);
+                response = this.findByPk(id);
             }
             keys.close();
             stmt.close();
@@ -103,13 +127,17 @@ public class expenseDaoH2 implements IDao<Expense>, expenseIDao {
         } catch (Exception e){
             e.printStackTrace();
         }
-        return expense;
+        return response.get();
     }
 
     @Override
     public Expense update(Expense expense) {
         Connection connection = dbConnection.getConnection();
-        String query = String.format(UPDATE, expense.getAmount(), expense.getDate(),expense.getDescription(),expense.getId());
+        String query = String.format(UPDATE,
+                expense.getEmit_date(),
+                expense.getDescription(),
+                expense.getCategory_id(),
+                expense.getId());
         execute(connection,query);
         return expense;
     }
@@ -122,8 +150,22 @@ public class expenseDaoH2 implements IDao<Expense>, expenseIDao {
     }
 
     @Override
-    public List<Expense> findAllRelations() {
-        return List.of();
+    public Optional<ExpenseResponseDto> findAllRelationsByPk(int id) {
+        Connection connection = dbConnection.getConnection();
+        ExpenseResponseDto expense = null;
+        try {
+            PreparedStatement ps = connection.prepareStatement(FIND_BY_PK_ALL_RELATIONS);
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                expense = createExpenseRelationsObject(rs);
+            }
+            rs.close();
+            ps.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return expense != null? Optional.of(expense) : Optional.empty();
     }
 
     @Override
@@ -147,19 +189,6 @@ public class expenseDaoH2 implements IDao<Expense>, expenseIDao {
         return expenseList;
     }
 
-    @Override
-    public void addCategory(int id_cat, int id_exp) {
-        Connection connection = dbConnection.getConnection();
-        String query = String.format(ADD_CATEGORY, id_cat, id_exp);
-        execute(connection,query);
-    }
-
-    @Override
-    public void removeCategory(int id_cat,int id_exp) {
-        Connection connection = dbConnection.getConnection();
-        String query = String.format(REMOVE_CATEGORY, id_cat, id_exp);
-        execute(connection,query);
-    }
 
     @Override
     public void addExpiration(Expiration expiration) {
@@ -181,7 +210,12 @@ public class expenseDaoH2 implements IDao<Expense>, expenseIDao {
         Date emit_date = rs.getDate("EMIT_DATE");
         double amount = rs.getDouble("AMOUNT");
         String description = rs.getString("DESCRIPTION");
-        return new Expense(id,amount,emit_date,description);
+        Expense expense = new Expense(id,amount,emit_date,description);
+        expense.setCategory_id(rs.getInt("ID_CATEGORY"));
+        expense.setSupplier_id(rs.getInt("ID_SUPPLIER"));
+        expense.setUser_id(rs.getInt("ID_USER"));
+        expense.setExpires(rs.getInt("EXPIRES"));
+        return expense;
     }
 
     private void execute(Connection connection, String query) {
@@ -205,7 +239,6 @@ public class expenseDaoH2 implements IDao<Expense>, expenseIDao {
             Object[] expiration = (Object[]) rs.getArray("EXPIRATIONS").getArray();
             for (int i = 0; i < expiration.length;i++) {
                 String string = expiration[i].toString();
-
                 String[] data = string.substring(11).replace("[", "").replace("]", "").replace("'", "").split(", ");
                 Expiration exp = new Expiration();
                 exp.setId(Integer.parseInt(data[0].trim()));

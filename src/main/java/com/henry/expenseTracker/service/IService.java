@@ -1,7 +1,10 @@
 package com.henry.expenseTracker.service;
 
+import com.henry.expenseTracker.entity.Supplier;
+
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public interface IService<T> {
     /**

@@ -74,7 +74,9 @@ public class categoryDaoH2 implements IDao<Category> {
             stmt.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
             ResultSet keys = stmt.getGeneratedKeys();
             if (keys.next()) {
-                category.setId(keys.getInt(1));
+                int id = keys.getInt(1);
+                System.out.println(id);
+                category.setId(id);
             }
             keys.close();
             stmt.close();

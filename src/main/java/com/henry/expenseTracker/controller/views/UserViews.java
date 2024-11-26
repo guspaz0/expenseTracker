@@ -30,11 +30,10 @@ public class UserViews {
                                @RequestParam("username") String username,
                                @RequestParam("email") String email,
                                @RequestParam("password") String password) {
-        UserService userService = new UserService();
         User user = userService.save(new User(username, email, password));
         if (user != null) {
             model.addAttribute("username", user.getName());
-            return "redirect:/user/dashboard";
+            return "redirect:/login";
         } else {
             model.addAttribute("username",username);
             model.addAttribute("email",email);

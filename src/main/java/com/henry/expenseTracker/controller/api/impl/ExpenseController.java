@@ -1,5 +1,8 @@
 package com.henry.expenseTracker.controller.api.impl;
 
+import com.henry.expenseTracker.controller.views.Dto.ExpenseRequestDto;
+import com.henry.expenseTracker.controller.views.Dto.ExpenseRequestUpdateDto;
+import com.henry.expenseTracker.dao.dto.ExpenseResponseDto;
 import com.henry.expenseTracker.entity.Expense;
 import com.henry.expenseTracker.service.impl.ExpenseService;
 import org.springframework.http.HttpStatus;
@@ -17,18 +20,21 @@ public class ExpenseController {
     public ExpenseController(ExpenseService expenseService) { this.expenseService = expenseService;}
 
     @GetMapping
-    public ResponseEntity<List<Expense>> getAll(@RequestHeader Integer userId) {
-        ResponseEntity<List<Expense>> response = null;
+    public ResponseEntity<List<ExpenseResponseDto>> getAll(@RequestHeader Integer userId) {
+        ResponseEntity<List<ExpenseResponseDto>> response = null;
         if (userId.describeConstable().isPresent()) {
-            response = ResponseEntity.status(HttpStatus.OK).body(expenseService.findAll());
+            response = ResponseEntity.status(HttpStatus.OK).body(expenseService.findAllRelationsByUser(userId));
         }
         return response;
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Expense> findById(@PathVariable Integer id) {
-        Expense expense = expenseService.findByPk(id).orElse(null);
-        return ResponseEntity.status(HttpStatus.OK).body(expense);
+    public ResponseEntity<ExpenseResponseDto> findById(@PathVariable Integer id,
+                                                       @RequestHeader Integer userId) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(expenseService.findAllRelationsByUser(userId)
+                        .stream().filter(expense -> expense.getId() == id)
+                        .toList().get(0));
     }
 
     @DeleteMapping("/{id}")
@@ -44,8 +50,10 @@ public class ExpenseController {
     }
 
     @PostMapping
-    public ResponseEntity<Expense> create(@RequestBody Expense expense) {
-        return ResponseEntity.ok(expenseService.save(expense));
+    public ResponseEntity<ExpenseResponseDto> create(@RequestBody Expense expense) {
+        Expense exp = expenseService.save(expense);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(expenseService.findAllRelationsByPk(exp.getId()).get());
     }
 
     @PutMapping

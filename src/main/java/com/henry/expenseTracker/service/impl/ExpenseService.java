@@ -1,5 +1,7 @@
 package com.henry.expenseTracker.service.impl;
 
+import com.henry.expenseTracker.controller.views.Dto.ExpenseRequestDto;
+import com.henry.expenseTracker.controller.views.Dto.ExpenseRequestUpdateDto;
 import com.henry.expenseTracker.dao.IDao;
 import com.henry.expenseTracker.dao.dto.ExpenseResponseDto;
 import com.henry.expenseTracker.dao.expenseIDao;
@@ -13,8 +15,8 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ExpenseService implements IService<Expense> {
-    private IDao<Expense> expenseDaoGeneric;
+public class ExpenseService {
+    private expenseDaoH2 expenseDaoGeneric;
     private expenseIDao expenseIDao;
 
     public ExpenseService(){
@@ -22,32 +24,31 @@ public class ExpenseService implements IService<Expense> {
         this.expenseDaoGeneric = new expenseDaoH2();
     }
 
-    @Override
     public List<Expense> findAll() {
         return expenseDaoGeneric.findAll();
     }
 
-    @Override
+
     public Expense save(Expense expense) {
-        return null;
+        ExpenseResponseDto request = new ExpenseResponseDto();
+        return expenseDaoGeneric.save(expense);
     }
 
-    @Override
     public Optional<Expense> findByPk(int id) {
         return expenseDaoGeneric.findByPk(id);
     }
-    @Override
+
     public void delete(int id) {
         expenseDaoGeneric.delete(id);
     }
 
-    @Override
     public Expense update(Expense expense) {
+
         return expenseDaoGeneric.update(expense);
     }
     
-    public List<Expense> findAllRelations() {
-        return expenseIDao.findAllRelations();
+    public Optional<ExpenseResponseDto> findAllRelationsByPk(int id) {
+        return expenseIDao.findAllRelationsByPk(id);
     }
 
     public List<ExpenseResponseDto> findAllRelationsByUser(int id) {

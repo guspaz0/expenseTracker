@@ -22,18 +22,22 @@ import java.util.Optional;
 @RequestMapping("/")
 public class MainController {
     private final ObjectMapper objectMapper = new ObjectMapper();
+    private final UserService userService = new UserService();
 
+    @GetMapping
+    public String mainPage(Model model) {
+
+        return "main";
+    }
     @GetMapping("/error")
     public String errorPage(Model model) {
+
         return "error";
     }
 
-    @GetMapping("/")
-    public String mainPage(Model model) {
-        return "main";
-    }
     @GetMapping("/about")
     public String aboutPage(Model model) {
+
         return "about";
     }
     @GetMapping("/login")
@@ -41,12 +45,11 @@ public class MainController {
         return "login";
     }
 
-    @PostMapping(value = "/login", consumes = {"*/*"})
+    @PostMapping("/login")
     public String LoginRequestPage(Model model,
                                    @RequestParam("email") String email,
                                    @RequestParam("password") String password,
                                    HttpServletResponse response) throws JsonProcessingException {
-        UserService userService = new UserService();
         Optional<User> find = userService.findAll().stream().filter(userdb ->
                     userdb.getEmail().equals(email) && userdb.getPassword().equals(password)
                 ).findAny();
@@ -60,10 +63,6 @@ public class MainController {
             cookie.setHttpOnly(true);
             cookie.setMaxAge(86400);
             response.addCookie(cookieEmail);
-//            HttpCookie cookie = ResponseCookie.from("user", user.getName())
-//                    .maxAge(86400).httpOnly(true).build();
-//            HttpCookie cookie2 = ResponseCookie.from("email", user.getEmail())
-//                    .maxAge(86400).httpOnly(true).build();
             return "redirect:/user/dashboard";
         } else {
             model.addAttribute("errorlogin", "user or password incorrect");

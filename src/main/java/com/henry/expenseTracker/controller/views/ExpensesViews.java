@@ -25,6 +25,44 @@ public class ExpensesViews {
     private final ExpenseService expenseService = new ExpenseService();
     private final CategoryService categoryService = new CategoryService();
     private final UserService userService = new UserService();
+    @PostMapping
+    public String RegisterSave(Model model,
+                               @CookieValue(value="userid") String userid,
+                               @RequestParam("description") String description,
+                               @RequestParam("emit_date") String emit_date,
+                               @RequestParam("supplier") String supplier,
+                               @RequestParam("category") String category,
+                               @RequestParam(value = "expires", defaultValue = "0") String expires,
+                               @RequestParam("amount") String amount
+    ) {
+        Optional<User> user = userService.findByPk(Integer.parseInt(userid));
+        if (user.isPresent()) {
+            String result = null;
+            Expense expense = new Expense();
+            expense.setAmount(Double.parseDouble(amount));
+            expense.setDescription(description);
+            expense.setEmit_date(Date.valueOf(emit_date));
+            expense.setSupplier_id(Integer.parseInt(supplier));
+            expense.setCategory_id(Integer.parseInt(category));
+            expense.setUser_id(Integer.parseInt(userid));
+            expense.setExpires(Integer.parseInt(expires));
+            System.out.println(expense.toString());
+            Expense response = expenseService.save(expense);
+
+            if(response == null) {
+                model.addAttribute("supplierList", supplierService.findAll());
+                model.addAttribute("categoryList", categoryService.findAll());
+                model.addAttribute("expenseRequestDto", expense);
+                model.addAttribute("errorValidation","Error in form. check input fields");
+                result = "formExpense";
+            } else {
+                result = "redirect:/user/dashboard";
+            }
+            return result;
+        } else {
+            return "redirect:/login";
+        }
+    }
 
     @GetMapping("/register")
     public String Register(Model model,@CookieValue(value="userid") String userid) {
@@ -38,41 +76,6 @@ public class ExpensesViews {
         } else {
             return "redirect:/login";
         }
-
     }
-    @PostMapping("/")
-    public String RegisterSave(Model model,
-                               @CookieValue(value="userid") String userid,
-                               @RequestParam("description") String description,
-                               @RequestParam("emit_date") String emit_date,
-                               @RequestParam("supplier") String supplier,
-                               @RequestParam("category") String category,
-                               @RequestParam("expiration") String expiration,
-                               @RequestParam("amount") String amount
-                               ) {
-        Optional<User> user = userService.findByPk(Integer.parseInt(userid));
-        if (user.isPresent()) {
-            String result;
-            ExpenseRequestDto expense = new ExpenseRequestDto();
-            expense.setAmount(Double.parseDouble(amount));
-            expense.setDescription(description);
-            expense.setDate(Date.valueOf(emit_date));
-            expense.setSupplier_id(Integer.parseInt(supplier));
-            expense.setCategory(Integer.parseInt(category));
 
-
-            if(expense == null) {
-                model.addAttribute("");
-                model.addAttribute("errorValidation","Error in form. check input fields");
-                result = "formExpense";
-            } else {
-
-                result = "redirect:/user/dashboard";
-            }
-            return result;
-        } else {
-            return "redirect:/login";
-        }
-
-    }
 }
