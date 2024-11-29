@@ -11,13 +11,12 @@
 <main class="container">
   <div th:replace="~{fragments/general.html :: sidebar}"></div>
   <div class="main">
-    <h2>Categories List...</h2>
-    <div th:if="${categoryList.empty}">there are no categories or something went wrong...</div>
-    <div th:if="${categoryList}" class="expenses">
-      <article th:each="category : ${categoryList}">
-        <span>Id: <span th:text="${category.id}"></span></span>
-        <span th:text="${category.name}"></span>
-        <span th:text="${category.description}"></span>
+    <h2>Supplier List...</h2>
+    <div th:if="${paymentList.empty}">there are no suppliers or something went wrong...</div>
+    <div th:if="${paymentList}" class="expenses">
+      <article th:each="payment : ${paymentList}">
+        <span>Id: <span th:text="${payment.id}"></span></span>
+        <span th:text="${payment.name}"></span>
       </article>
     </div>
   </div>

@@ -16,7 +16,7 @@
     <div th:if="${supplierList}" class="expenses">
       <article th:each="supplier : ${supplierList}">
         <span>Id: <span th:text="${supplier.id}"></span></span>
-        <span>Name: <span th:text="${supplier.name}"></span></span>
+        <span th:text="${supplier.name}"></span>
       </article>
     </div>
   </div>

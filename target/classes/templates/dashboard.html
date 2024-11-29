@@ -18,6 +18,8 @@
         <span th:text="${expense.description}"> description: </span>
         <span th:text="${expense.date}"> Date: </span>
         <span th:text="${expense.amount}"> Amount: </span>
+        <span>Category: <span th:text="${expense.category.name}"></span></span>
+        <span>Supplier: <span th:text="${expense.supplier.name}"></span></span>
       </article>
     </div>
   </div>
