@@ -3,11 +3,14 @@ package com.henry.expenseTracker.controller.api.impl;
 import com.henry.expenseTracker.controller.api.IController;
 import com.henry.expenseTracker.entity.Category;
 import com.henry.expenseTracker.service.impl.CategoryService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+@Slf4j
 @RestController
 @RequestMapping("/api/category")
 public class CategoryController implements IController<Category> {
@@ -41,6 +44,7 @@ public class CategoryController implements IController<Category> {
 
     @PostMapping
     public ResponseEntity<Category> save(@RequestBody Category category) {
+        log.info("Creando categoria nueva...");
         return ResponseEntity.ok(categoryService.save(category));
     }
 }
