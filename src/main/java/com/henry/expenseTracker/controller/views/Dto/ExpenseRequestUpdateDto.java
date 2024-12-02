@@ -6,7 +6,7 @@ import java.sql.Date;
 import java.util.List;
 
 public class ExpenseRequestUpdateDto extends Expense {
-    private int id;
+    private Long id;
     private String description;
     private double amount;
     private Date date;
@@ -15,11 +15,11 @@ public class ExpenseRequestUpdateDto extends Expense {
 
     public ExpenseRequestUpdateDto(){}
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

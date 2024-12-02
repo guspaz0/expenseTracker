@@ -22,17 +22,17 @@ public interface IService<T> {
      * @param id identifier of Object com.henry.expenseTracker.entity you want to search
      * @return Object com.henry.expenseTracker.entity
      */
-    Optional<T> findByPk(int id);
+    Optional<T> findById(Long id);
 
     /**
      * List of Objects com.henry.expenseTracker.entity stored in database
      * @param id identifier of Object com.henry.expenseTracker.entity you want to delete
      */
-    void delete(int id);
+    void delete(Long id);
 
     /**
      * @param t Object to be updated
      * @return Object updated
      */
-    T update(T t);
+    void update(T t);
 }

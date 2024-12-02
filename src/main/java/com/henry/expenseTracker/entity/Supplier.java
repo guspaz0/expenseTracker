@@ -1,20 +1,17 @@
 package com.henry.expenseTracker.entity;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import jakarta.persistence.*;
+import lombok.*;
 
+@Entity
+@Table(name="suppliers")
 @Getter
 @Setter
 @ToString
 @NoArgsConstructor
 public class Supplier {
-    private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
     private String name;
-
-    public Supplier(int id, String name) {
-        this.id = id;
-        this.name = name;
-    }
 }

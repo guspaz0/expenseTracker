@@ -27,19 +27,29 @@ public class CategoryController implements IController<Category> {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Category> findByPk(@PathVariable Integer id) {
-        Category category = categoryService.findByPk(id).orElse(null);
+    public ResponseEntity<Category> findById(@PathVariable Long id) {
+        Category category = categoryService.findById(id).orElse(null);
         return ResponseEntity.status(HttpStatus.OK).body(category);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable Integer id) {
-        return null;
+    public ResponseEntity<String> delete(@PathVariable Long id) {
+        try {
+            categoryService.delete(id);
+            return ResponseEntity.ok("Category successfully deleted");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Error deleting Category");
+        }
     }
 
     @PutMapping
-    public ResponseEntity<Category> update(@RequestBody Category category) {
-        return ResponseEntity.ok(categoryService.update(category));
+    public ResponseEntity<String> update(@RequestBody Category category) {
+        try {
+            categoryService.update(category);
+            return ResponseEntity.ok("Category updated successfully");
+        } catch(Exception e){
+            return ResponseEntity.ok("Error updating Category");
+        }
     }
 
     @PostMapping

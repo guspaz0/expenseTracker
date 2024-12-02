@@ -1,43 +1,46 @@
 package com.henry.expenseTracker.service.impl;
 
-import com.henry.expenseTracker.dao.IDao;
-import com.henry.expenseTracker.dao.impl.userDaoH2;
 import com.henry.expenseTracker.entity.User;
+import com.henry.expenseTracker.repository.UserRepository;
+import com.henry.expenseTracker.service.IService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserService implements IDao<User> {
-    private IDao<User> userDao;
+public class UserService implements IService<User> {
+    private final UserRepository userRepository;
 
-    public UserService(){
-        this.userDao = new userDaoH2();
+    public UserService(UserRepository userRepository){
+        this.userRepository = userRepository;
     }
 
     @Override
     public List<User> findAll() {
-        return userDao.findAll();
+        return userRepository.findAll();
     }
 
     @Override
     public User save(User user) {
-        return userDao.save(user);
+        return userRepository.save(user);
     }
 
     @Override
-    public Optional<User> findByPk(int id) {
-        return userDao.findByPk(id);
+    public Optional<User> findById(Long id) {
+        return userRepository.findById(id);
     }
 
     @Override
-    public void delete(int id) {
-        userDao.delete(id);
+    public void delete(Long id) {
+        userRepository.deleteById(id);
     }
 
     @Override
-    public User update(User user) {
-        return userDao.update(user);
+    public void update(User user) {
+        Optional<User> optionalUser = this.findById(user.getId());
+        if (optionalUser.isPresent()) {
+            userRepository.save(user);
+        }
     }
 }

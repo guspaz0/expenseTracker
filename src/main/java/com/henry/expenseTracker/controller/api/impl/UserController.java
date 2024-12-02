@@ -25,15 +25,15 @@ public class UserController implements IController<User> {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> findByPk(@PathVariable Integer id) {
-        User user = userService.findByPk(id).orElse(null);
+    public ResponseEntity<User> findById(@PathVariable Long id) {
+        User user = userService.findById(id).orElse(null);
         return ResponseEntity.ok(user);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable Integer id) {
+    public ResponseEntity<String> delete(@PathVariable Long id) {
         ResponseEntity<String> response = null;
-        if (userService.findByPk(id).isPresent()) {
+        if (userService.findById(id).isPresent()) {
             userService.delete(id);
             response = ResponseEntity.status(HttpStatus.NO_CONTENT).body("Deleted");
         } else {
@@ -43,12 +43,18 @@ public class UserController implements IController<User> {
     }
 
     @PutMapping
-    public ResponseEntity<User> update(@RequestBody User user) {
-        return ResponseEntity.ok(userService.update(user));
+    public ResponseEntity<String> update(@RequestBody User user) {
+        try {
+            userService.update(user);
+            return ResponseEntity.ok("User updated successfully");
+        } catch (Exception e) {
+            return ResponseEntity.ok("Error updating User");
+        }
+
     }
 
     @PostMapping
     public ResponseEntity<User> save(@RequestBody User user) {
-        return ResponseEntity.ok(userService.update(user));
+        return ResponseEntity.ok(userService.save(user));
     }
 }

@@ -1,7 +1,5 @@
 package com.henry.expenseTracker.controller.views;
 
-import com.henry.expenseTracker.controller.views.Dto.ExpenseRequestDto;
-import com.henry.expenseTracker.dao.dto.ExpenseResponseDto;
 import com.henry.expenseTracker.entity.Category;
 import com.henry.expenseTracker.entity.Expense;
 import com.henry.expenseTracker.entity.Supplier;
@@ -21,10 +19,19 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/expense")
 public class ExpensesViews {
-    private final SupplierService supplierService = new SupplierService();
-    private final ExpenseService expenseService = new ExpenseService();
-    private final CategoryService categoryService = new CategoryService();
-    private final UserService userService = new UserService();
+    private final SupplierService supplierService;
+    private final ExpenseService expenseService;
+    private final CategoryService categoryService;
+    private final UserService userService;
+
+    public ExpensesViews(SupplierService supplierService, ExpenseService expenseService, CategoryService categoryService, UserService userService) {
+        this.supplierService = supplierService;
+        this.expenseService = expenseService;
+        this.categoryService = categoryService;
+        this.userService = userService;
+    }
+
+
     @PostMapping
     public String RegisterSave(Model model,
                                @CookieValue(value="userid") String userid,
@@ -35,29 +42,29 @@ public class ExpensesViews {
                                @RequestParam(value = "expires", defaultValue = "0") String expires,
                                @RequestParam("amount") String amount
     ) {
-        Optional<User> user = userService.findByPk(Integer.parseInt(userid));
+        Optional<User> user = userService.findById(Long.parseLong(userid));
         if (user.isPresent()) {
             String result = null;
-            Expense expense = new Expense();
-            expense.setAmount(Double.parseDouble(amount));
-            expense.setDescription(description);
-            expense.setEmit_date(Date.valueOf(emit_date));
-            expense.setSupplier_id(Integer.parseInt(supplier));
-            expense.setCategory_id(Integer.parseInt(category));
-            expense.setUser_id(Integer.parseInt(userid));
-            expense.setExpires(Integer.parseInt(expires));
-            System.out.println(expense.toString());
-            Expense response = expenseService.save(expense);
+//            Expense expense = new Expense();
+//            expense.setAmount(Double.parseDouble(amount));
+//            expense.setDescription(description);
+//            expense.setEmit_date(Date.valueOf(emit_date));
+//            expense.setSupplier_id(Integer.parseInt(supplier));
+//            expense.setCategory_id(Integer.parseInt(category));
+//            expense.setUser_id(Integer.parseInt(userid));
+//            expense.setExpires(Integer.parseInt(expires));
+//            System.out.println(expense.toString());
+            //Expense response = expenseService.save(expense);
 
-            if(response == null) {
-                model.addAttribute("supplierList", supplierService.findAll());
-                model.addAttribute("categoryList", categoryService.findAll());
-                model.addAttribute("expenseRequestDto", expense);
-                model.addAttribute("errorValidation","Error in form. check input fields");
-                result = "formExpense";
-            } else {
+//            if(response == null) {
+//                model.addAttribute("supplierList", supplierService.findAll());
+//                model.addAttribute("categoryList", categoryService.findAll());
+//                model.addAttribute("expenseRequestDto", expense);
+//                model.addAttribute("errorValidation","Error in form. check input fields");
+//                result = "formExpense";
+//            } else {
                 result = "redirect:/user/dashboard";
-            }
+//            }
             return result;
         } else {
             return "redirect:/login";
@@ -66,7 +73,7 @@ public class ExpensesViews {
 
     @GetMapping("/register")
     public String Register(Model model,@CookieValue(value="userid") String userid) {
-        Optional<User> user = userService.findByPk(Integer.parseInt(userid));
+        Optional<User> user = userService.findById(Long.parseLong(userid));
         if (user.isPresent()) {
             List<Supplier> supplierList = supplierService.findAll();
             List<Category> categoryList = categoryService.findAll();

@@ -1,28 +1,24 @@
 package com.henry.expenseTracker.controller.views;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.henry.expenseTracker.entity.User;
 import com.henry.expenseTracker.service.impl.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
-
-import org.springframework.http.HttpCookie;
-import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 @Controller
 @RequestMapping("/")
 public class MainController {
-    private final ObjectMapper objectMapper = new ObjectMapper();
-    private final UserService userService = new UserService();
+    private final UserService userService;
+
+    public MainController(UserService userService) {
+        this.userService=userService;
+    }
 
     @GetMapping
     public String mainPage(Model model) {

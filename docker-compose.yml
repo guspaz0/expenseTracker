@@ -7,7 +7,7 @@ services:
     image: h2-alpine
     restart: always
     volumes:
-     - ${SRC_DIRECTORY}/db_expenses.sql:/opt/h2-data/db_expenses.sql
+     - ${SRC_DIRECTORY}/schema.sql:/opt/h2-data/schema.sql
     ports:
       - 81:81
       - 1521:1521

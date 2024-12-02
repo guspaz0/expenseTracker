@@ -1,21 +1,28 @@
 package com.henry.expenseTracker.entity;
 
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+@Entity
+@Table(name="users")
 @Getter
 @Setter
 @ToString
 @NoArgsConstructor
 public class User {
-    private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
     private String name;
     private String email;
+
+    @Basic(fetch = FetchType.LAZY)
     private String password;
 
-    public User(int id, String name, String email) {
+    public User(Long id, String name, String email) {
         this.id = id;
         this.name = name;
         this.email = email;

@@ -1,8 +1,7 @@
 package com.henry.expenseTracker.controller.views;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.henry.expenseTracker.dao.dto.ExpenseResponseDto;
+//import com.henry.expenseTracker.dao.dto.ExpenseResponseDto;
 import com.henry.expenseTracker.entity.User;
 import com.henry.expenseTracker.service.impl.ExpenseService;
 import com.henry.expenseTracker.service.impl.UserService;
@@ -10,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,9 +17,13 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/user")
 public class UserViews {
-    private final ObjectMapper objectMapper = new ObjectMapper();
-    private final ExpenseService expenseService = new ExpenseService();
-    private final UserService userService = new UserService();
+    private final ExpenseService expenseService;
+    private final UserService userService;
+
+    public UserViews(ExpenseService expenseService, UserService userService) {
+        this.expenseService = expenseService;
+        this.userService = userService;
+    }
 
     @GetMapping("/register")
     public String Register(Model model) {
@@ -48,12 +52,12 @@ public class UserViews {
                                 @CookieValue(name = "username") String username,
                                 @CookieValue(name = "userid") String userid
     ) throws JsonProcessingException {
-        Optional<User> user = userService.findByPk(Integer.parseInt(userid));
+        Optional<User> user = userService.findById(Long.parseLong(userid));
         if (user.isPresent()) {
             model.addAttribute("username", user.get().getName());
-            List<ExpenseResponseDto> expenseList = expenseService.findAllRelationsByUser(user.get().getId());
-            System.out.println(expenseList);
-            model.addAttribute("expenses", expenseList);
+//            List<ExpenseResponseDto> expenseList = expenseService.findAllRelationsByUser(user.get().getId());
+//            System.out.println(expenseList);
+            model.addAttribute("expenses", /*expenseList*/ new ArrayList<>());
             return "dashboard";
         } else {
             return "redirect:/";

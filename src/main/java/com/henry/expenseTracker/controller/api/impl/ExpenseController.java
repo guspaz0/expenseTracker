@@ -1,6 +1,6 @@
 package com.henry.expenseTracker.controller.api.impl;
 
-import com.henry.expenseTracker.dao.dto.ExpenseResponseDto;
+import com.henry.expenseTracker.controller.api.IController;
 import com.henry.expenseTracker.entity.Expense;
 import com.henry.expenseTracker.service.impl.ExpenseService;
 import lombok.extern.slf4j.Slf4j;
@@ -9,62 +9,58 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/expenses")
-public class ExpenseController {
-
+@RequestMapping("/api/expense")
+public class ExpenseController implements IController<Expense> {
     private final ExpenseService expenseService;
 
-    public ExpenseController(ExpenseService expenseService) { this.expenseService = expenseService;}
+    public ExpenseController(ExpenseService expenseService) {
+        this.expenseService = expenseService;
+    }
 
     @GetMapping
-    public ResponseEntity<List<ExpenseResponseDto>> getAll(@RequestHeader Integer userId) {
-        log.info("[GET:/api/expenses] Lista de Expensas...");
-        log.debug("probando esto es un log de debug");
-        log.warn("probando esto es una advertencia");
+    public ResponseEntity<List<Expense>> findAll() {
+        return ResponseEntity.ok(expenseService.findAll());
+    }
 
-        ResponseEntity<List<ExpenseResponseDto>> response = null;
-        if (userId.describeConstable().isPresent()) {
-            response = ResponseEntity.status(HttpStatus.OK).body(expenseService.findAllRelationsByUser(userId));
-        }
-        return response;
+    @Override
+    public ResponseEntity<List<Expense>> findAll(Long id) {
+        return IController.super.findAll(id);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ExpenseResponseDto> findById(@PathVariable Integer id,
-                                                       @RequestHeader Integer userId) {
-        ExpenseResponseDto expenseResponse = expenseService.findAllRelationsByUser(userId)
-            .stream().filter(expense -> expense.getId() == id)
-            .toList().get(0);
-        log.info("El usuario Id={} ah accedido al Expense Id={}", userId, id);
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(expenseResponse);
+    public ResponseEntity<Expense> findById(@PathVariable Long id) {
+        Expense expense = expenseService.findById(id).orElse(null);
+        return ResponseEntity.ok(expense);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteById(@PathVariable Integer id) {
-        ResponseEntity<String> response = null;
-        if (expenseService.findByPk(id).isPresent()) {
+    public ResponseEntity<String> delete(@PathVariable Long id) {
+        try {
             expenseService.delete(id);
-            response = ResponseEntity.status(HttpStatus.NO_CONTENT).body("Deleted");
-        } else {
-            response = ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.ok("Expense successfully deleted");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Error deleting Expense");
         }
-        return response;
-    }
-
-    @PostMapping
-    public ResponseEntity<ExpenseResponseDto> create(@RequestBody Expense expense) {
-        log.info("[POST:/api/expenses] Creando Expensa nueva...");
-        Expense exp = expenseService.save(expense);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(expenseService.findAllRelationsByPk(exp.getId()).get());
     }
 
     @PutMapping
-    public ResponseEntity<Expense> update(@RequestBody Expense expense) {
-        return ResponseEntity.ok(expenseService.update(expense));
+    public ResponseEntity<String> update(@RequestBody Expense expense) {
+        Optional<Expense> optionalExpense = expenseService.findById(expense.getId());
+        if (optionalExpense.isPresent()) {
+            expenseService.save(expense);
+            return ResponseEntity.ok("Expense successfully updated");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_MODIFIED).body("Error Updating Expense");
+        }
+    }
+
+    @PostMapping
+    public ResponseEntity<Expense> save(@RequestBody Expense expense) {
+        log.info("Body: "+ expense.toString());
+        return ResponseEntity.ok(expenseService.save(expense));
     }
 }
