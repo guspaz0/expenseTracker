@@ -12,16 +12,18 @@ import lombok.Setter;;
 @NoArgsConstructor
 public class ExpirationPayments {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Double expiration_part;
-    private Double payment_part;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="payment_id")
-    private Payment payment;
+    @Column(name="expiration_part")
+    private Double expirationPart;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="expiration_id")
-    private Expiration expiration;
+    @Column(name="payment_part")
+    private Double paymentPart;
+
+    @Column(name="payment_id")
+    private Long paymentId;
+
+    @Column(name="expiration_id")
+    private Long expirationId;
 }

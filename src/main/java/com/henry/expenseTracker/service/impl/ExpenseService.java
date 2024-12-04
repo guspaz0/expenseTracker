@@ -1,54 +1,59 @@
 package com.henry.expenseTracker.service.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.henry.expenseTracker.Dto.request.ExpenseRequestDto;
+import com.henry.expenseTracker.Dto.response.ExpenseResponseDto;
 import com.henry.expenseTracker.entity.Expense;
 import com.henry.expenseTracker.repository.ExpenseRepository;
-import com.henry.expenseTracker.service.IService;
+import com.henry.expenseTracker.service.IExpenseService;
 import org.springframework.stereotype.Service;
 
-
 import java.util.List;
-import java.util.Optional;
 
 @Service
-public class ExpenseService implements IService<Expense>{
-
+public class ExpenseService implements IExpenseService {
     private final ExpenseRepository expenseRepository;
+    private final ObjectMapper objectMapper;
 
-    public ExpenseService(ExpenseRepository expenseRepository) {
+    public ExpenseService(ExpenseRepository expenseRepository, ObjectMapper objectMapper) {
         this.expenseRepository = expenseRepository;
+        this.objectMapper = objectMapper;
     }
     @Override
-    public List<Expense> findAll() {
-        return expenseRepository.findAll();
+    public List<ExpenseResponseDto> findAll() {
+        return expenseRepository.findAll()
+                .stream().map(this::mapToDTO)
+                .toList();
     }
 
     @Override
-    public Expense save(Expense expense) {
-        //ExpenseResponseDto request = new ExpenseResponseDto();
-        return expenseRepository.save(expense);
+    public ExpenseResponseDto save(ExpenseRequestDto expense) {
+        return mapToDTO(expenseRepository.save(mapToEntity(expense)));
     }
     @Override
-    public Optional<Expense> findById(Long id) {
-        return expenseRepository.findById(id);
+    public ExpenseResponseDto findById(Long id) throws Exception {
+        return mapToDTO(expenseRepository.findById(id)
+                .orElseThrow(()-> new Exception("Expense id: "+id+" not found")));
     }
+
     @Override
-    public void delete(Long id) {
+    public String delete(Long id) throws Exception {
+        this.findById(id);
         expenseRepository.deleteById(id);
+        return "Expense id: "+id+" deleted successfully";
     }
 
     @Override
-    public void update(Expense expense) {
-        Optional<Expense> optionalExpense = this.findById(expense.getId());
-        if (optionalExpense.isPresent()) {
-            expenseRepository.save(expense);
-        }
+    public ExpenseResponseDto update(ExpenseRequestDto expense) throws Exception {
+        this.findById(expense.getId());
+        return mapToDTO(expenseRepository.save(mapToEntity(expense)));
     }
-    
-//    public Optional<ExpenseResponseDto> findAllRelationsByPk(int id) {
-//        return expenseIDao.findAllRelationsByPk(id);
-//    }
-//
-//    public List<ExpenseResponseDto> findAllRelationsByUser(int id) {
-//        return expenseIDao.findAllRelationsByUser(id);
-//    }
+
+    private ExpenseResponseDto mapToDTO(Expense expense) {
+        return objectMapper.convertValue(expense, ExpenseResponseDto.class);
+    }
+
+    private Expense mapToEntity(ExpenseRequestDto expenseRequestDto) {
+        return objectMapper.convertValue(expenseRequestDto, Expense.class);
+    }
 }

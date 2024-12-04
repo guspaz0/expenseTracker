@@ -16,18 +16,18 @@ import java.util.List;
 @AllArgsConstructor
 public class Expiration {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name="expense_id")
-//    private Expense expense;
     private Long expense_id;
 
     @Temporal(TemporalType.DATE)
     private Date expiration;
 
-    @OneToMany(mappedBy = "expiration", fetch = FetchType.LAZY)
+    @OneToMany(
+            mappedBy = "expirationId",
+            fetch = FetchType.LAZY
+    )
     private List<ExpirationPayments> payments = new ArrayList<>();
 
     private double participation;

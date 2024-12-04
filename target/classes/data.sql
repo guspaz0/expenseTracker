@@ -1,17 +1,17 @@
-INSERT INTO USERS VALUES
-('1','Gustavo Paz', 'gusti.paz@gmail.com', '1234');
+INSERT INTO USERS(NAME,EMAIL,PASSWORD) VALUES
+('Gustavo Paz', 'gusti.paz@gmail.com', '1234');
 
-INSERT INTO SUPPLIERS(ID, NAME) VALUES
-('1','EDESE SA'),
-('2','NATURGY SA'),
-('3','TELECOM SA'),
-('4','ALMACEN DEL BARRIO SRL'),
-('5','GRIMOLDI'),
-('6','HENRY');
+INSERT INTO SUPPLIERS(NAME) VALUES
+('EDESE SA'),
+('NATURGY SA'),
+('TELECOM SA'),
+('ALMACEN DEL BARRIO SRL'),
+('GRIMOLDI'),
+('HENRY');
 
-INSERT INTO CATEGORY VALUES
-('1','Bienes basicos','Productos basicos tangibles como por ejemplo ropa, comida'),
-('2','Servicios basicos','Servicios de basicos por ejemplo agua, electricidad, gas, telefonia, etc.');
+INSERT INTO CATEGORY(NAME, DESCRIPTION) VALUES
+('Bienes basicos','Productos basicos tangibles como por ejemplo ropa, comida'),
+('Servicios basicos','Servicios de basicos por ejemplo agua, electricidad, gas, telefonia, etc.');
 
 INSERT INTO expenses(DESCRIPTION, EMIT_DATE, AMOUNT,USER_ID, SUPPLIER_ID,CATEGORY_ID, EXPIRES) VALUES
 ('factura de Electricidad periodo de agosto 2024','2024-10-24',100,1,'1','2',1),

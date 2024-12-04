@@ -1,46 +1,63 @@
 package com.henry.expenseTracker.service.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.henry.expenseTracker.Dto.request.UserRequestDto;
+import com.henry.expenseTracker.Dto.response.UserResponseDto;
 import com.henry.expenseTracker.entity.User;
 import com.henry.expenseTracker.repository.UserRepository;
-import com.henry.expenseTracker.service.IService;
+import com.henry.expenseTracker.service.IUserService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
-public class UserService implements IService<User> {
+public class UserService implements IUserService {
     private final UserRepository userRepository;
+    private final ObjectMapper objectMapper;
 
-    public UserService(UserRepository userRepository){
+    public UserService(UserRepository userRepository, ObjectMapper objectMapper){
         this.userRepository = userRepository;
+        this.objectMapper = objectMapper;
     }
 
     @Override
-    public List<User> findAll() {
-        return userRepository.findAll();
+    public List<UserResponseDto> findAll() {
+        return userRepository.findAll()
+                .stream().map(this::mapToDTO)
+                .toList();
     }
 
     @Override
-    public User save(User user) {
-        return userRepository.save(user);
+    public UserResponseDto save(UserRequestDto user) {
+        return mapToDTO(userRepository.save(mapToEntity(user)));
     }
 
     @Override
-    public Optional<User> findById(Long id) {
-        return userRepository.findById(id);
+    public UserResponseDto findById(Long id) throws Exception {
+            return mapToDTO(userRepository.findById(id)
+                    .orElseThrow(()-> new Exception("User id: "+id+" not found"))
+            );
     }
 
     @Override
-    public void delete(Long id) {
+    public String delete(Long id) throws Exception {
+        this.findById(id);
         userRepository.deleteById(id);
+        return "User id: "+id+" deleted successfully";
     }
 
     @Override
-    public void update(User user) {
-        Optional<User> optionalUser = this.findById(user.getId());
-        if (optionalUser.isPresent()) {
-            userRepository.save(user);
-        }
+    public UserResponseDto update(UserRequestDto user) throws Exception {
+        userRepository.findById(user.getId())
+                .orElseThrow(()-> new Exception("User id: "+user.getId()+" not found"));
+        return mapToDTO(userRepository.save(mapToEntity(user)));
+    }
+
+    private UserResponseDto mapToDTO(User task) {
+        return objectMapper.convertValue(task, UserResponseDto.class);
+    }
+
+    private User mapToEntity(UserRequestDto taskRequestDTO) {
+        return objectMapper.convertValue(taskRequestDTO, User.class);
     }
 }

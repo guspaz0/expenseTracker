@@ -69,7 +69,7 @@ CREATE TABLE IF NOT exists EXPIRATION_PAYMENTS(
 	payment_part decimal(4,3) NOT NULL DEFAULT 1,
 	payment_id int NOT NULL,
 	expiration_id int NOT NULL,
-	FOREIGN KEY(payment_id) REFERENCES PAYMENTS(id),
+	FOREIGN KEY(payment_id) REFERENCES PAYMENTS(id) ON DELETE cascade,
 	FOREIGN KEY(expiration_id) REFERENCES EXPIRATIONS(id),
 	check(expiration_part <= 1 AND payment_part <= 1 AND expiration_part > 0 AND payment_part > 0)
 );

@@ -15,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 public class Payment {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Temporal(TemporalType.DATE)
@@ -26,7 +26,15 @@ public class Payment {
     @JoinColumn(name="supplier_id")
     private Supplier supplier;
 
-    @OneToMany(mappedBy = "payment"/*, fetch=FetchType.LAZY*/)
+    @OneToMany(
+            /*mappedBy = "payment",*/
+            fetch = FetchType.LAZY
+    )
+    @JoinTable(
+            name="expiration_payments",
+            joinColumns = @JoinColumn(name="payment_id"),
+            inverseJoinColumns = @JoinColumn(name="id")
+    )
     private List<ExpirationPayments> expirations = new ArrayList<>();
 
 //    @ManyToOne

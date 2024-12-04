@@ -21,10 +21,11 @@ public class Expense {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String description;
-    private double amount;
+    private Double amount;
 
     @Temporal(TemporalType.DATE)
-    private Date emit_date;
+    @Column(name="emit_date")
+    private Date emitDate;
 
     @ManyToOne
     @JoinColumn(name="category_id")
@@ -34,9 +35,8 @@ public class Expense {
     @JoinColumn(name="supplier_id")
     private Supplier supplier;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name="user_id")
-    private Long user_id;
+    @Column(name="user_id")
+    private Long userId;
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -48,17 +48,4 @@ public class Expense {
 
     private int expires;
 
-
-    public Expense(double amount, Date emit_date, String description) {
-        this.amount = amount;
-        this.emit_date = emit_date;
-        this.description = description;
-    }
-
-    public Expense(Long id, double amount, Date emit_date, String description) {
-        this.id = id;
-        this.amount = amount;
-        this.emit_date = emit_date;
-        this.description = description;
-    }
 }
