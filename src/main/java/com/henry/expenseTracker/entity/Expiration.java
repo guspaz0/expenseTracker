@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,10 +20,12 @@ public class Expiration {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long expense_id;
+    @Column(name="expense_id")
+    private Long expenseId;
 
     @Temporal(TemporalType.DATE)
-    private Date expiration;
+    @Column(name="expire_date")
+    private LocalDate expireDate;
 
     @OneToMany(
             mappedBy = "expirationId",

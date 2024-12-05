@@ -56,7 +56,7 @@ create TABLE IF NOT exists expenses(
 CREATE TABLE IF NOT EXISTS expirations(
 	id identity PRIMARY KEY,
 	expense_id int NOT null,
-	expiration date default(CURRENT_DATE) NOT NULL,
+	expire_date date default(CURRENT_DATE) NOT NULL,
 	participation decimal(4,3) DEFAULT 1,
 	FOREIGN KEY(expense_id) REFERENCES expenses(id),
 	CHECK(participation <= 1)

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +20,7 @@ public class Payment {
     private Long id;
 
     @Temporal(TemporalType.DATE)
-    private Date date;
+    private LocalDate date;
     private double amount;
 
     @ManyToOne

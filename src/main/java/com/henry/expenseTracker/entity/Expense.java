@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class Expense {
 
     @Temporal(TemporalType.DATE)
     @Column(name="emit_date")
-    private Date emitDate;
+    private LocalDate emitDate;
 
     @ManyToOne
     @JoinColumn(name="category_id")
@@ -38,7 +39,7 @@ public class Expense {
     @Column(name="user_id")
     private Long userId;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany
     @JoinTable(
             name="expirations",
             joinColumns = @JoinColumn(name="expense_id"),

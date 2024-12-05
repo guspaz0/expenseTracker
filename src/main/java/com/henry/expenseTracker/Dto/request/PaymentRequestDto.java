@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -19,7 +19,7 @@ public class PaymentRequestDto {
     private Long id;
 
     @NotBlank(message="Date is mandatory")
-    private Date date;
+    private LocalDate date;
 
     @Min(value = 0, message = "amount must be more than 0")
     private Double amount;
