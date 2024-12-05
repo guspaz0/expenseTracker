@@ -32,6 +32,7 @@ public class ExpenseService implements IExpenseService {
     }
     @Override
     public List<ExpenseResponseDto> findAll() {
+        log.info("Listando todas las expensas");
         return expenseRepository.findAll()
                 .stream().map(this::mapToDTO)
                 .toList();
@@ -40,7 +41,7 @@ public class ExpenseService implements IExpenseService {
 
     @Override
     public ExpenseResponseDto save(ExpenseRequestDto expenseRequestDto) {
-        log.info(expenseRequestDto.toString());
+        log.info("Creando nueva expensa");
         checkExpirations(expenseRequestDto.getExpirations());
         Expense expense = mapToEntity(expenseRequestDto);
         expense.setExpirations(new ArrayList<>());
@@ -52,7 +53,6 @@ public class ExpenseService implements IExpenseService {
                         return expirationRepository.save(mapToEntity(expiration));
                 }).toList();
         finalExpense.setExpirations(expirationList);
-        //log.info(String.valueOf(finalExpense));
         return mapToDTO(finalExpense);
     }
 
@@ -67,6 +67,7 @@ public class ExpenseService implements IExpenseService {
     public String delete(Long id) throws Exception {
         this.findById(id);
         expenseRepository.deleteById(id);
+        log.info("Borrando expensa id: {}",id);
         return "Expense id: "+id+" deleted successfully";
     }
 
@@ -82,7 +83,8 @@ public class ExpenseService implements IExpenseService {
                 .reduce(0.00,(cum, elem) ->
                         cum + elem.getParticipation(), Double::sum);
         if (sumParticipation != 1) {
-            throw new RuntimeException("total sum of expense expiration participation is not equal than 100%");
+            log.warn("inconsistencia al checkear los vencimientos de la nueva expensa");
+            throw new RuntimeException("total sum of expense expiration participation is not equal than 1.0");
         }
     }
 
