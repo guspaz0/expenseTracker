@@ -1,18 +1,25 @@
 package com.henry.expenseTracker.service.impl;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.henry.expenseTracker.Dto.request.ExpenseRequestDto;
 import com.henry.expenseTracker.Dto.request.ExpirationRequestDto;
+import com.henry.expenseTracker.Dto.response.CategoryResponseDto;
 import com.henry.expenseTracker.Dto.response.ExpenseResponseDto;
+import com.henry.expenseTracker.Dto.response.ExpirationResponseDto;
+import com.henry.expenseTracker.Dto.response.SupplierResponseDto;
+import com.henry.expenseTracker.entity.Category;
 import com.henry.expenseTracker.entity.Expense;
 import com.henry.expenseTracker.entity.Expiration;
+import com.henry.expenseTracker.entity.Supplier;
+import com.henry.expenseTracker.exceptions.ExpenseException;
 import com.henry.expenseTracker.repository.ExpenseRepository;
 import com.henry.expenseTracker.repository.ExpirationRepository;
 import com.henry.expenseTracker.service.IExpenseService;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,15 +28,14 @@ import java.util.List;
 public class ExpenseService implements IExpenseService {
     private final ExpenseRepository expenseRepository;
     private final ExpirationRepository expirationRepository;
-    private final ObjectMapper objectMapper;
+    private final Jackson2ObjectMapperBuilder objectMapper = new Jackson2ObjectMapperBuilder();
 
     public ExpenseService(ExpenseRepository expenseRepository,
-                          ExpirationRepository expirationRepository,
-                          ObjectMapper objectMapper) {
+                          ExpirationRepository expirationRepository) {
         this.expenseRepository = expenseRepository;
         this.expirationRepository = expirationRepository;
-        this.objectMapper = objectMapper;
     }
+
     @Override
     public List<ExpenseResponseDto> findAll() {
         log.info("Listando todas las expensas");
@@ -42,17 +48,22 @@ public class ExpenseService implements IExpenseService {
     @Override
     public ExpenseResponseDto save(ExpenseRequestDto expenseRequestDto) {
         log.info("Creando nueva expensa");
-        checkExpirations(expenseRequestDto.getExpirations());
+        if (!expenseRequestDto.getExpirations().isEmpty()) {
+            checkExpirations(expenseRequestDto.getExpirations());
+            expenseRequestDto.setExpires(1);
+        } else { expenseRequestDto.setExpires(0); }
         Expense expense = mapToEntity(expenseRequestDto);
         expense.setExpirations(new ArrayList<>());
         expense = expenseRepository.save(expense);
         Expense finalExpense = expense;
-        List<Expiration> expirationList =  expenseRequestDto.getExpirations()
-                .stream().map(expiration -> {
+        if (!expenseRequestDto.getExpirations().isEmpty()) {
+            log.info("{}",expenseRequestDto.getExpirations().toString());
+            finalExpense.setExpirations(expenseRequestDto.getExpirations()
+                    .stream().map(expiration -> {
                         expiration.setExpenseId(finalExpense.getId());
                         return expirationRepository.save(mapToEntity(expiration));
-                }).toList();
-        finalExpense.setExpirations(expirationList);
+                    }).toList());
+        }
         return mapToDTO(finalExpense);
     }
 
@@ -83,20 +94,77 @@ public class ExpenseService implements IExpenseService {
                 .reduce(0.00,(cum, elem) ->
                         cum + elem.getParticipation(), Double::sum);
         if (sumParticipation != 1) {
-            log.warn("inconsistencia al checkear los vencimientos de la nueva expensa");
-            throw new RuntimeException("total sum of expense expiration participation is not equal than 1.0");
+            log.error("inconsistencia al checkear los vencimientos de la nueva expensa");
+            throw new ExpenseException("total sum of expense expiration participation is not equal than 1.0");
         }
     }
 
     private ExpenseResponseDto mapToDTO(Expense expense) {
-        return objectMapper.convertValue(expense, ExpenseResponseDto.class);
+        List<ExpirationResponseDto> expirationsList = expense.getExpirations()
+                .stream().map(expiration ->
+                        ExpirationResponseDto.builder()
+                                .id(expiration.getId())
+                                .expenseId(expiration.getExpenseId())
+                                .participation(expiration.getParticipation())
+                                .expireDate(expiration.getExpireDate())
+                                .build())
+                .toList();
+        return ExpenseResponseDto.builder()
+                .id(expense.getId())
+                .description(expense.getDescription())
+                .emitDate(expense.getEmitDate())
+                .amount(expense.getAmount())
+                .category(
+                    CategoryResponseDto.builder()
+                        .id(expense.getCategory().getId())
+                        .name(expense.getCategory().getName())
+                        .description(expense.getCategory().getDescription())
+                        .build()
+                )
+                .expires(expense.getExpires())
+                .expirations(expirationsList)
+                .supplier(
+                    SupplierResponseDto.builder()
+                        .id(expense.getSupplier().getId())
+                        .name(expense.getSupplier().getName())
+                        .build()
+                )
+                .userId(expense.getUserId())
+                .build();
     }
 
-    private Expense mapToEntity(ExpenseRequestDto expenseRequestDto) {
-        return objectMapper.convertValue(expenseRequestDto, Expense.class);
+    private Expense mapToEntity(ExpenseRequestDto expense) {
+        return Expense.builder()
+                .id(expense.getId())
+                .description(expense.getDescription())
+                .emitDate(expense.getEmitDate())
+                .amount(expense.getAmount())
+                .category(
+                        Category.builder()
+                                .id(expense.getCategory().getId())
+                                .name(expense.getCategory().getName())
+                                .description(expense.getCategory().getDescription())
+                                .build()
+                )
+                .expires(expense.getExpires())
+                .expirations(
+                        expense.getExpirations().stream().map(this::mapToEntity).toList())
+                .supplier(
+                        Supplier.builder()
+                                .id(expense.getSupplier().getId())
+                                .name(expense.getSupplier().getName())
+                                .build()
+                )
+                .userId(expense.getUserId())
+                .build();
     }
 
-    private Expiration mapToEntity(ExpirationRequestDto expirationRequestDto) {
-        return objectMapper.convertValue(expirationRequestDto, Expiration.class);
+    private Expiration mapToEntity(ExpirationRequestDto expiration) {
+        return Expiration.builder()
+                .id(expiration.getId())
+                .expenseId(expiration.getExpenseId())
+                .participation(expiration.getParticipation())
+                .expireDate(expiration.getExpireDate())
+                .build();
     }
 }

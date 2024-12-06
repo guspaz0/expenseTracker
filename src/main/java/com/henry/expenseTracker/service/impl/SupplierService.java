@@ -7,6 +7,7 @@ import com.henry.expenseTracker.Dto.response.SupplierResponseDto;
 import com.henry.expenseTracker.entity.Supplier;
 import com.henry.expenseTracker.repository.SupplierRepository;
 import com.henry.expenseTracker.service.ISupplierService;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,11 +15,9 @@ import java.util.List;
 @Service
 public class SupplierService implements ISupplierService {
     private final SupplierRepository supplierRepository;
-    private final ObjectMapper objectMapper;
 
-    public SupplierService(SupplierRepository supplierRepository, ObjectMapper objectMapper){
+    public SupplierService(SupplierRepository supplierRepository){
         this.supplierRepository = supplierRepository;
-        this.objectMapper = objectMapper;
     }
 
     @Override
@@ -54,11 +53,17 @@ public class SupplierService implements ISupplierService {
         return "Supplier id: "+id+" deleted successfully";
     }
 
-    private SupplierResponseDto mapToDTO(Supplier payment) {
-        return objectMapper.convertValue(payment, SupplierResponseDto.class);
+    private SupplierResponseDto mapToDTO(Supplier supplier) {
+        return SupplierResponseDto.builder()
+                .id(supplier.getId())
+                .name(supplier.getName())
+                .build();
     }
 
     private Supplier mapToEntity(SupplierRequestDto supplierRequestDTO) {
-        return objectMapper.convertValue(supplierRequestDTO, Supplier.class);
+        return Supplier.builder()
+                .id(supplierRequestDTO.getId())
+                .name(supplierRequestDTO.getName())
+                .build();
     }
 }

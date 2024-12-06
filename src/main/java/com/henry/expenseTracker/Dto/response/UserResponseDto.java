@@ -4,6 +4,7 @@ import lombok.*;
 
 @Getter
 @Setter
+@Builder
 public class UserResponseDto {
     private Long id;
     private String name;

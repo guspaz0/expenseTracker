@@ -3,6 +3,7 @@ package com.henry.expenseTracker.controller;
 import com.henry.expenseTracker.Dto.request.CategoryRequestDto;
 import com.henry.expenseTracker.Dto.response.CategoryResponseDto;
 import com.henry.expenseTracker.service.impl.CategoryService;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,13 +36,13 @@ public class CategoryController {
     }
 
     @PutMapping
-    public ResponseEntity<CategoryResponseDto> update(@RequestBody CategoryRequestDto category) throws Exception {
+    public ResponseEntity<CategoryResponseDto> update(@Valid @RequestBody CategoryRequestDto category) throws Exception {
         return ResponseEntity.ok(categoryService.update(category));
 
     }
 
     @PostMapping
-    public ResponseEntity<CategoryResponseDto> save(@RequestBody CategoryRequestDto category) {
+    public ResponseEntity<CategoryResponseDto> save(@Valid @RequestBody CategoryRequestDto category) {
         return ResponseEntity.ok(categoryService.save(category));
     }
 }

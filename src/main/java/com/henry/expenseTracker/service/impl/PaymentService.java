@@ -3,6 +3,7 @@ package com.henry.expenseTracker.service.impl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.henry.expenseTracker.Dto.request.ExpirationPaymentRequestDto;
 import com.henry.expenseTracker.Dto.request.PaymentRequestDto;
+import com.henry.expenseTracker.Dto.response.ExpirationPaymentResponseDto;
 import com.henry.expenseTracker.Dto.response.PaymentResponseDto;
 import com.henry.expenseTracker.entity.ExpirationPayments;
 import com.henry.expenseTracker.entity.Payment;
@@ -23,14 +24,12 @@ import java.util.List;
 public class PaymentService implements IPaymentService {
     private final PaymentRepository paymentRepository;
     private final ExpirationPaymentsRepository expirationPaymentsRepository;
-    private final ObjectMapper objectMapper;
 
     public PaymentService(PaymentRepository paymentRepository,
                           ExpirationPaymentsRepository expirationPayments,
                           ObjectMapper objectMapper) {
         this.paymentRepository = paymentRepository;
         this.expirationPaymentsRepository = expirationPayments;
-        this.objectMapper = objectMapper;
     }
 
     @Override
@@ -59,13 +58,14 @@ public class PaymentService implements IPaymentService {
         payRequest.setUser_id(paymentRequest.getUserId());
 
         Payment newPayment = paymentRepository.save(payRequest);
-        newPayment.setExpirations(
-                savePaymentExpiration(
-                        newPayment.getId(),
-                        paymentRequest.getExpirations()
-                )
-        );
-
+        if (!paymentRequest.getExpirations().isEmpty()) {
+            newPayment.setExpirations(
+                    savePaymentExpiration(
+                            newPayment.getId(),
+                            paymentRequest.getExpirations()
+                    )
+            );
+        }
         return mapToDTO(newPayment);
     }
 
@@ -113,19 +113,54 @@ public class PaymentService implements IPaymentService {
                 .reduce(expirationPayments.getPaymentPart(),(cum, elem) ->
                         cum + elem.getPaymentPart(), Double::sum);
         if (sumExpirationPart > 1 || sumPaymentPart > 1) {
+            log.error("La participacion del pago excede el monto disponible");
             throw new RuntimeException("La participacion del pago excede el monto disponible");
         }
     }
 
     private PaymentResponseDto mapToDTO(Payment payment) {
-        return objectMapper.convertValue(payment, PaymentResponseDto.class);
+        return PaymentResponseDto.builder()
+                .id(payment.getId())
+                .date(payment.getDate())
+                .amount(payment.getAmount())
+                .userId(payment.getUser_id())
+                .supplierId(payment.getSupplier().getId())
+                .expirations(payment.getExpirations().stream().map(this::mapToDTO).toList())
+                .build();
     }
 
     private Payment mapToEntity(PaymentRequestDto paymentRequestDTO) {
-        return objectMapper.convertValue(paymentRequestDTO, Payment.class);
+        return Payment.builder()
+                .id(paymentRequestDTO.getId())
+                .date(paymentRequestDTO.getDate())
+                .amount(paymentRequestDTO.getAmount())
+                .supplier(Supplier.builder()
+                        .id(paymentRequestDTO.getSupplierId())
+                        .build())
+                .user_id(paymentRequestDTO.getUserId())
+                .expirations(paymentRequestDTO.getExpirations().stream()
+                        .map(this::mapToEntity).toList())
+                .build();
     }
-    private ExpirationPayments mapToEntity(ExpirationPaymentRequestDto paymentRequestDTO) {
-        return objectMapper.convertValue(paymentRequestDTO, ExpirationPayments.class);
+
+    private ExpirationPayments mapToEntity(ExpirationPaymentRequestDto expirationPaymentDto) {
+        return ExpirationPayments.builder()
+                .paymentId(expirationPaymentDto.getPaymentId())
+                .paymentPart(expirationPaymentDto.getPaymentPart())
+                .expirationId(expirationPaymentDto.getExpirationId())
+                .expirationPart(expirationPaymentDto.getExpirationPart())
+                .id(expirationPaymentDto.getId())
+                .build();
+    }
+
+    private ExpirationPaymentResponseDto mapToDTO(ExpirationPayments expirationPayments) {
+        return ExpirationPaymentResponseDto.builder()
+                .paymentId(expirationPayments.getPaymentId())
+                .paymentPart(expirationPayments.getPaymentPart())
+                .expirationId(expirationPayments.getExpirationId())
+                .expirationPart(expirationPayments.getExpirationPart())
+                .id(expirationPayments.getId())
+                .build();
     }
 
 }

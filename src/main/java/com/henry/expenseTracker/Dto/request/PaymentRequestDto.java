@@ -18,8 +18,7 @@ public class PaymentRequestDto {
 
     private Long id;
 
-    @NotBlank(message="Date is mandatory")
-    private LocalDate date;
+    private LocalDate date = LocalDate.now();
 
     @Min(value = 0, message = "amount must be more than 0")
     private Double amount;
@@ -30,7 +29,6 @@ public class PaymentRequestDto {
     @NotNull(message = "userId cannot be null")
     private Long userId;
 
-    //@NotEmpty(message = "List of expiration cannot be empty")
     private List<ExpirationPaymentRequestDto> expirations;
 
 }

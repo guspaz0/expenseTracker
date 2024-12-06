@@ -1,15 +1,17 @@
 package com.henry.expenseTracker.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;;
+import lombok.*;
+
+
 
 @Entity
 @Table(name="expiration_payments")
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ExpirationPayments {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -3,7 +3,6 @@ package com.henry.expenseTracker.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +14,7 @@ import java.util.List;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Expiration {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

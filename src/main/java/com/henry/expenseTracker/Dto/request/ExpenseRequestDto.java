@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -21,23 +22,20 @@ public class ExpenseRequestDto {
     private String description;
 
     @NotNull
-    @NotBlank(message="Amount is mandatory")
+    @Min(value = 1, message = "amount must be greater than 1")
     private Double amount;
 
-    @NotBlank(message="Date is mandatory")
+    @NotNull
     private LocalDate emitDate;
 
     @NotNull
     private Category category;
 
-    @NotNull
-    private int expires;
+    @Min(value = 0, message = "amount is binary value(1 or 0)")
+    @Max(value = 1, message = "amount is binary value(1 or 0)")
+    private int expires = 0;
 
-    @NotEmpty(message = "List of expirations cannot be empty")
-    private List<ExpirationRequestDto> expirations;
-
-    @Min(value = 1, message = "Student should have enrolled in at least one subject")
-    @Max(value = 4, message = "Student cannot be enrolled more than four subjects")
+    private List<ExpirationRequestDto> expirations = new ArrayList<>();
 
     @NotNull
     private Supplier supplier;

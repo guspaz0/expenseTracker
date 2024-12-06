@@ -4,6 +4,7 @@ import com.henry.expenseTracker.Dto.request.PaymentRequestDto;
 import com.henry.expenseTracker.Dto.response.PaymentResponseDto;
 import com.henry.expenseTracker.service.impl.PaymentService;
 import com.henry.expenseTracker.service.impl.UserService;
+import jakarta.validation.Valid;
 import lombok.SneakyThrows;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -41,13 +42,13 @@ public class PaymentController {
     }
 
     @PutMapping
-    public ResponseEntity<PaymentResponseDto> update(@RequestBody PaymentRequestDto payment) {
+    public ResponseEntity<PaymentResponseDto> update(@Valid @RequestBody PaymentRequestDto payment) {
         return ResponseEntity.ok(paymentService.update(payment));
     }
 
     @SneakyThrows
     @PostMapping
-    public ResponseEntity<PaymentResponseDto> save(@RequestBody PaymentRequestDto paymentRequest) {
+    public ResponseEntity<PaymentResponseDto> save(@Valid @RequestBody PaymentRequestDto paymentRequest) {
         return ResponseEntity.ok(paymentService.save(paymentRequest));
     }
 

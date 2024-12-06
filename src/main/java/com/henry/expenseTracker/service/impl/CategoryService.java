@@ -6,6 +6,7 @@ import com.henry.expenseTracker.Dto.response.CategoryResponseDto;
 import com.henry.expenseTracker.entity.Category;
 import com.henry.expenseTracker.repository.CategoryRepository;
 import com.henry.expenseTracker.service.ICategoryService;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,11 +14,10 @@ import java.util.List;
 @Service
 public class CategoryService implements ICategoryService {
     private final CategoryRepository categoryRepository;
-    private final ObjectMapper objectMapper;
 
-    public CategoryService(CategoryRepository categoryRepository, ObjectMapper objectMapper){
+
+    public CategoryService(CategoryRepository categoryRepository){
         this.categoryRepository = categoryRepository;
-        this.objectMapper = objectMapper;
     }
 
     @Override
@@ -53,10 +53,19 @@ public class CategoryService implements ICategoryService {
     }
 
     private CategoryResponseDto mapToDTO(Category category) {
-        return objectMapper.convertValue(category, CategoryResponseDto.class);
+        return CategoryResponseDto.builder()
+                .id(category.getId())
+                .name(category.getName())
+                .description(category.getDescription())
+                .build();
+
     }
 
     private Category mapToEntity(CategoryRequestDto categoryRequestDto) {
-        return objectMapper.convertValue(categoryRequestDto, Category.class);
+        return Category.builder()
+                .id(categoryRequestDto.getId())
+                .name(categoryRequestDto.getName())
+                .description(categoryRequestDto.getDescription())
+                .build();
     }
 }

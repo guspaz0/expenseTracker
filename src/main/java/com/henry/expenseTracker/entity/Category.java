@@ -1,10 +1,7 @@
 package com.henry.expenseTracker.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 @Entity
 @Table(name = "category")
@@ -12,6 +9,8 @@ import lombok.ToString;
 @Setter
 @ToString
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,12 +19,4 @@ public class Category {
     private String name;
     private String description;
 
-    public Category(Long id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-    public Category(String name, String description) {
-        this.name = name;
-        this.description = description;
-    }
 }

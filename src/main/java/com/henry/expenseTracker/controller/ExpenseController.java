@@ -4,8 +4,10 @@ import com.henry.expenseTracker.Dto.request.ExpenseRequestDto;
 import com.henry.expenseTracker.Dto.response.ExpenseResponseDto;
 import com.henry.expenseTracker.entity.Expense;
 import com.henry.expenseTracker.service.impl.ExpenseService;
+import jakarta.validation.Valid;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,13 +42,13 @@ public class ExpenseController {
 
     @SneakyThrows
     @PutMapping
-    public ResponseEntity<ExpenseResponseDto> update(@RequestBody ExpenseRequestDto expense) {
-        return ResponseEntity.ok(expenseService.update(expense));
+    public ResponseEntity<ExpenseResponseDto> update(@Valid @RequestBody ExpenseRequestDto expense) {
+        return new ResponseEntity<>(expenseService.update(expense), HttpStatus.CREATED);
     }
 
     @PostMapping
-    public ResponseEntity<ExpenseResponseDto> save(@RequestBody ExpenseRequestDto expense) {
+    public ResponseEntity<ExpenseResponseDto> save(@Valid @RequestBody ExpenseRequestDto expense) {
         //log.info("Body: "+ expense.toString());
-        return ResponseEntity.ok(expenseService.save(expense));
+        return new ResponseEntity<>(expenseService.save(expense), HttpStatus.CREATED);
     }
 }
