@@ -3,7 +3,6 @@ spring:
     name: ExpenseTracker
   datasource:
     driverClassName: org.h2.Driver
-    #url: jdbc:h2:tcp://localhost:1521/db_expenses ## para la bd de docker
     url: jdbc:h2:mem:~/db_expenses
     username: sa
     password: test

@@ -1,5 +1,5 @@
 INSERT INTO USERS(NAME,EMAIL,PASSWORD) VALUES
-('Gustavo Paz', 'gusti.paz@gmail.com', '1234');
+('Jhon Doe', 'Jhon.Doe@gmail.com', '1234');
 
 INSERT INTO SUPPLIERS(NAME) VALUES
 ('EDESE SA'),

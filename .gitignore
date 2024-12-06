@@ -30,3 +30,6 @@ bin/
 
 ### enviroment ###
 .env
+
+docker-compose.yml
+Dockerfile
