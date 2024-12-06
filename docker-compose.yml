@@ -1,0 +1,15 @@
+services:
+  db-expenses:
+    container_name: com.henry.expenseTracker.db-expense-tracker
+    build:
+      dockerfile: ./Dockerfile
+      context: ./
+    image: h2-alpine
+    restart: always
+    volumes:
+     - ${SRC_DIRECTORY}/schema.sql:/opt/h2-data/schema.sql
+    ports:
+      - 81:81
+      - 1521:1521
+    environment:
+      H2_OPTIONS: -ifNotExists
