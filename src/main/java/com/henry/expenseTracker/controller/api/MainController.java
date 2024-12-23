@@ -1,4 +1,4 @@
-package com.henry.expenseTracker.controller;
+package com.henry.expenseTracker.controller.api;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/")
 public class MainController {
 
-    @GetMapping
+    @GetMapping("/api")
     public ResponseEntity<String> mainPage(){
         return ResponseEntity.ok("Expense Tracker API");
     }

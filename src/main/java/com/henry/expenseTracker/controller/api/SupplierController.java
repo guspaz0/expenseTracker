@@ -1,8 +1,7 @@
-package com.henry.expenseTracker.controller;
+package com.henry.expenseTracker.controller.api;
 
 import com.henry.expenseTracker.Dto.request.SupplierRequestDto;
 import com.henry.expenseTracker.Dto.response.SupplierResponseDto;
-import com.henry.expenseTracker.entity.Supplier;
 import com.henry.expenseTracker.service.impl.SupplierService;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;

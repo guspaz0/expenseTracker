@@ -1,4 +1,4 @@
-package com.henry.expenseTracker.controller;
+package com.henry.expenseTracker.controller.api;
 
 import com.henry.expenseTracker.Dto.request.CategoryRequestDto;
 import com.henry.expenseTracker.Dto.response.CategoryResponseDto;

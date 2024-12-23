@@ -1,8 +1,7 @@
-package com.henry.expenseTracker.controller;
+package com.henry.expenseTracker.controller.api;
 
 import com.henry.expenseTracker.Dto.request.ExpenseRequestDto;
 import com.henry.expenseTracker.Dto.response.ExpenseResponseDto;
-import com.henry.expenseTracker.entity.Expense;
 import com.henry.expenseTracker.service.impl.ExpenseService;
 import jakarta.validation.Valid;
 import lombok.SneakyThrows;

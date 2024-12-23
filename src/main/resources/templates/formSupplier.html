@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <th:block th:insert="~{fragments/general.html :: headerfiles}"></th:block>
+</head>
+<body>
+<header th:replace="~{fragments/general.html :: header(username=${username})}"></header>
+<hr>
+<nav th:replace="~{fragments/general.html :: navbar}"></nav>
+<main class="container">
+  <div th:replace="~{fragments/general.html :: sidebar}"></div>
+  <div class="main">
+    <h2>Create Supplier...</h2>
+    <form class="registerUser" action="/supplier" method="POST">
+      <label for="name">Name</label>
+      <input id="name" type="text" name="name" th:value="${name}"/>
+      <input type="submit">
+    </form>
+  </div>
+</main>
+<div th:replace="~{fragments/general.html :: footer}"></div>
+</body>
+</html>

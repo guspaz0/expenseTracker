@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <th:block th:insert="~{fragments/general.html :: headerfiles}"></th:block>
+</head>
+<body>
+<header th:replace="~{fragments/general.html :: header(username=${username})}"></header>
+<hr>
+<aside th:replace="~{fragments/general.html :: navbar}"></aside>
+<div th:replace="~{fragments/general.html :: about}">
+</div>
+<div th:replace="~{fragments/general.html :: footer}"></div>
+</body>
+</html>
