@@ -7,6 +7,7 @@ import com.henry.expenseTracker.Dto.response.UserResponseDto;
 import com.henry.expenseTracker.entity.User;
 import com.henry.expenseTracker.service.impl.ExpenseService;
 import com.henry.expenseTracker.service.impl.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 
+@Tag(name="User Templates")
 @Controller
 @RequestMapping("/user")
 public class UserViews {

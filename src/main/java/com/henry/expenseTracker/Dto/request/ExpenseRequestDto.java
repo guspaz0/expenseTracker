@@ -41,6 +41,7 @@ public class ExpenseRequestDto {
     private Supplier supplier;
 
     @NotNull
+    @Min(value=1)
     private Long userId;
 
 }

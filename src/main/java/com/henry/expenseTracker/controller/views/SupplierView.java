@@ -4,12 +4,14 @@ import com.henry.expenseTracker.Dto.request.SupplierRequestDto;
 import com.henry.expenseTracker.Dto.response.UserResponseDto;
 import com.henry.expenseTracker.service.impl.SupplierService;
 import com.henry.expenseTracker.service.impl.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 
+@Tag(name="Supplier templates")
 @Controller
 @RequestMapping("/supplier")
 public class SupplierView {

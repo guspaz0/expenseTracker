@@ -15,6 +15,7 @@ import com.henry.expenseTracker.service.impl.CategoryService;
 import com.henry.expenseTracker.service.impl.ExpenseService;
 import com.henry.expenseTracker.service.impl.SupplierService;
 import com.henry.expenseTracker.service.impl.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.SneakyThrows;
 import org.hibernate.annotations.View;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+@Tag(name="Expense templates")
 @Controller
 @RequestMapping("/expense")
 public class ExpenseView {

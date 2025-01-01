@@ -5,6 +5,7 @@ import com.henry.expenseTracker.Dto.response.CategoryResponseDto;
 import com.henry.expenseTracker.Dto.response.UserResponseDto;
 import com.henry.expenseTracker.service.impl.CategoryService;
 import com.henry.expenseTracker.service.impl.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
+@Tag(name="Category Templates")
 @Controller
 @RequestMapping("/category")
 public class CategoryView {
