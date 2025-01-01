@@ -8,9 +8,14 @@ La app trata sobre poder registrar expensas y poder hacer un seguimiento de gast
 - Java
 - Spring framework.
 - H2 server SQL.
+- Lombok
 - Mockito
--
+- Junit
+- OpenApi docs (Swagger)
 
-App para seguimiento de gastos. en construccion...
+---
 
-### Proyecto final Upskilling Backend Java
+Todos los endpoints estan documentados en la url "/v3/api-docs" en formato Json o bien "/swagger-ui/index.html" con interfaz de usuario web.
+
+---
+#### Proyecto final Upskilling Backend Java
