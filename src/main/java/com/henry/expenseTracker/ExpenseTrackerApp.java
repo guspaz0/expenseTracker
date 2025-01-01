@@ -8,7 +8,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @SpringBootApplication
 public class ExpenseTrackerApp {
-
     public static void main(String[] args) {
         SpringApplication.run(ExpenseTrackerApp.class, args);
     }
