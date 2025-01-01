@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <th:block th:insert="~{fragments/general.html :: headerfiles}"></th:block>
+</head>
+<body>
+<header th:replace="~{fragments/general.html :: header(username=${username})}"></header>
+<hr>
+<aside th:replace="~{fragments/general.html :: navbar}"></aside>
+<div class="register">
+    <h2>Register new User</h2>
+    <form class="registerUser" action="/user/register" method="POST">
+        <label for="username">Username</label>
+        <input id="username" type="text" name="username" th:value="${username}"/>
+        <label for="email">Email</label>
+        <input id="email" type="text" name="email" th:value="${email}"/>
+        <label for="password">Password</label>
+        <input id="password" type="password" name="password" th:value="${password}"/>
+        <p th:if="${errorRegister}">
+            <small class="errorValidation" th:text="${errorRegister}"></small>
+        </p>
+        <input type="submit">
+    </form>
+</div>
+<div th:replace="~{fragments/general.html :: footer}"></div>
+</body>
+</html>

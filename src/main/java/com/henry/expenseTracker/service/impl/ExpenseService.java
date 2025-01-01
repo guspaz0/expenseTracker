@@ -14,15 +14,18 @@ import com.henry.expenseTracker.exceptions.ExpenseException;
 import com.henry.expenseTracker.repository.ExpenseRepository;
 import com.henry.expenseTracker.repository.ExpirationRepository;
 import com.henry.expenseTracker.service.IExpenseService;
+import jakarta.transaction.Transactional;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+//@Transactional(propagation=Propagation.NESTED)
 @Slf4j
 @Service
 public class ExpenseService implements IExpenseService {

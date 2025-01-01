@@ -4,6 +4,7 @@ import com.henry.expenseTracker.Dto.request.UserRequestDto;
 import com.henry.expenseTracker.Dto.response.UserResponseDto;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface IUserService {
 
@@ -16,4 +17,6 @@ public interface IUserService {
     String delete(Long id) throws Exception;
 
     UserResponseDto update(UserRequestDto user) throws Exception;
+
+    Optional<UserResponseDto> login(String email, String password);
 }

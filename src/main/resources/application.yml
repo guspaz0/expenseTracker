@@ -34,6 +34,8 @@ logging:
     console: '%clr(%d{yyyy-MM-dd HH:mm:ss}){magenta} %clr(%-5p) %clr(%c{1}){blue}:%clr(%L){cyan} - %m%n'
 server:
   port: 8080
+  servlet:
+    context-path: / #root route
   error:
     whitelabel:
       enabled: false

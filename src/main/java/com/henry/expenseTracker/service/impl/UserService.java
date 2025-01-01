@@ -5,10 +5,13 @@ import com.henry.expenseTracker.Dto.response.UserResponseDto;
 import com.henry.expenseTracker.entity.User;
 import com.henry.expenseTracker.repository.UserRepository;
 import com.henry.expenseTracker.service.IUserService;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class UserService implements IUserService {
@@ -51,6 +54,17 @@ public class UserService implements IUserService {
         userRepository.findById(user.getId())
                 .orElseThrow(()-> new Exception("User id: "+user.getId()+" not found"));
         return mapToDTO(userRepository.save(mapToEntity(user)));
+    }
+    @SneakyThrows
+    @Override
+    public Optional<UserResponseDto> login(String email, String password){
+        Optional<User> user = userRepository.findByEmail(email);
+        if (user.isPresent()) {
+            if(Objects.equals(user.get().getPassword(), password)) {
+                return Optional.of(mapToDTO(user.get()));
+            }
+        }
+        return Optional.empty();
     }
 
     private UserResponseDto mapToDTO(User user) {

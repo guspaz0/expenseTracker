@@ -33,3 +33,6 @@ bin/
 
 docker-compose.yml
 Dockerfile
+
+/target
+target
