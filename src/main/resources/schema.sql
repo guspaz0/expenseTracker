@@ -9,7 +9,10 @@ create TABLE IF NOT exists users(
 	id identity primary key,
 	name varchar(50) not null,
 	email varchar(50) NOT NULL,
-	password varchar(255) NOT null
+	password varchar(255) NOT null,
+	country varchar(10) not null,
+	currency varchar(10) not null,
+	user_role enum('ROLE_USER','ROLE_ADMIN') not null default 'ROLE_USER'
 );
 
 DROP TABLE IF EXISTS category;
@@ -41,6 +44,7 @@ create TABLE IF NOT exists expenses(
 	id identity primary key,
 	description varchar(128) not null,
 	amount decimal(10,2),
+	currency varchar(10) default('ARS'),
 	emit_date date NOT NULL DEFAULT(CURRENT_DATE),
 	supplier_id int NOT NULL,
 	user_id int NOT NULL,

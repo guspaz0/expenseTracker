@@ -72,6 +72,9 @@ public class UserService implements IUserService {
                 .id(user.getId())
                 .name(user.getName())
                 .email(user.getEmail())
+                .country(user.getCountry())
+                .currency(user.getCurrency())
+
                 .build();
     }
 
@@ -81,6 +84,9 @@ public class UserService implements IUserService {
                 .name(userRequestDTO.getName())
                 .email(userRequestDTO.getEmail())
                 .password(userRequestDTO.getPassword())
+                .country(userRequestDTO.getCountry())
+                .currency(userRequestDTO.getCurrency())
+                .userRole(userRequestDTO.getUserRole())
                 .build();
     }
 }

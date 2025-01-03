@@ -22,6 +22,7 @@ public class Expense {
     private Long id;
     private String description;
     private Double amount;
+    private String currency;
 
     @Temporal(TemporalType.DATE)
     @Column(name="emit_date")

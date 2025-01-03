@@ -17,6 +17,12 @@ public class User {
     private Long id;
     private String name;
     private String email;
+    private String country;
+    private String currency;
+
+    @Enumerated(EnumType.STRING)
+    @JoinColumn(name="user_role")
+    private UserRole userRole;
 
     @Basic(fetch = FetchType.LAZY)
     private String password;

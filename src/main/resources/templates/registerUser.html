@@ -17,6 +17,14 @@
         <input id="email" type="text" name="email" th:value="${email}"/>
         <label for="password">Password</label>
         <input id="password" type="password" name="password" th:value="${password}"/>
+        <label for="country">Country:</label>
+        <select id="country" name="country">
+            <option th:each="country : ${countries}" th:value="${country.cca2}" th:text="${country.name.common}" th:selected="${country.cca2 == userRequestDto?.country}"></option>
+        </select>
+        <label for="currency">Prefered currency:</label>
+        <select id="currency" name="currency">
+            <option th:each="currency : ${currencies}" th:value="${currency}" th:text="${currency}"></option>
+        </select>
         <p th:if="${errorRegister}">
             <small class="errorValidation" th:text="${errorRegister}"></small>
         </p>

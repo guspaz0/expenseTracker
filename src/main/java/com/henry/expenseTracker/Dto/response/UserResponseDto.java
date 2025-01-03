@@ -9,4 +9,7 @@ public class UserResponseDto {
     private Long id;
     private String name;
     private String email;
+    private String country;
+    private String currency;
+    private String userRole;
 }

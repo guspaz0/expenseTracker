@@ -9,30 +9,35 @@ import com.henry.expenseTracker.entity.ExpirationPayments;
 import com.henry.expenseTracker.entity.Payment;
 import com.henry.expenseTracker.entity.Supplier;
 import com.henry.expenseTracker.exceptions.PaymentException;
+import com.henry.expenseTracker.infrastructure.dtos.CurrencyExchangeDto;
+import com.henry.expenseTracker.infrastructure.helpers.ApiCurrencyConnectorHelper;
 import com.henry.expenseTracker.repository.ExpirationPaymentsRepository;
 import com.henry.expenseTracker.repository.PaymentRepository;
 import com.henry.expenseTracker.service.IPaymentService;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 
 import java.util.ArrayList;
+import java.util.Currency;
 import java.util.List;
 
-//@Transactional(propagation= Propagation.NESTED)
+@Transactional(propagation= Propagation.NESTED)
 @Slf4j
 @Service
 public class PaymentService implements IPaymentService {
     private final PaymentRepository paymentRepository;
     private final ExpirationPaymentsRepository expirationPaymentsRepository;
+    private final ApiCurrencyConnectorHelper apiCurrency;
 
     public PaymentService(PaymentRepository paymentRepository,
                           ExpirationPaymentsRepository expirationPayments,
-                          ObjectMapper objectMapper) {
+                          ApiCurrencyConnectorHelper apiCurrency) {
         this.paymentRepository = paymentRepository;
         this.expirationPaymentsRepository = expirationPayments;
+        this.apiCurrency = apiCurrency;
     }
 
     @Override
@@ -120,6 +125,7 @@ public class PaymentService implements IPaymentService {
             throw new RuntimeException("La participacion del pago excede el monto disponible");
         }
     }
+
 
     private PaymentResponseDto mapToDTO(Payment payment) {
         return PaymentResponseDto.builder()
