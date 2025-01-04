@@ -5,16 +5,14 @@ import com.henry.expenseTracker.infrastructure.dtos.CountryDTO;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Component
 public class ApiCountriesConnectorHelper {
     private final WebClient countriesWebClient;
 
-    public ApiCountriesConnectorHelper(@Qualifier(value="countries") WebClient countriesWebClient) {
+    public ApiCountriesConnectorHelper(@Qualifier(value="countriesApi") WebClient countriesWebClient) {
         this.countriesWebClient = countriesWebClient;
     }
 

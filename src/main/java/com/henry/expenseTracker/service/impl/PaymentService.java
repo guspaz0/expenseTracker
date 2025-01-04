@@ -14,6 +14,7 @@ import com.henry.expenseTracker.infrastructure.helpers.ApiCurrencyConnectorHelpe
 import com.henry.expenseTracker.repository.ExpirationPaymentsRepository;
 import com.henry.expenseTracker.repository.PaymentRepository;
 import com.henry.expenseTracker.service.IPaymentService;
+import lombok.AllArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -27,18 +28,11 @@ import java.util.List;
 @Transactional(propagation= Propagation.NESTED)
 @Slf4j
 @Service
+@AllArgsConstructor
 public class PaymentService implements IPaymentService {
+
     private final PaymentRepository paymentRepository;
     private final ExpirationPaymentsRepository expirationPaymentsRepository;
-    private final ApiCurrencyConnectorHelper apiCurrency;
-
-    public PaymentService(PaymentRepository paymentRepository,
-                          ExpirationPaymentsRepository expirationPayments,
-                          ApiCurrencyConnectorHelper apiCurrency) {
-        this.paymentRepository = paymentRepository;
-        this.expirationPaymentsRepository = expirationPayments;
-        this.apiCurrency = apiCurrency;
-    }
 
     @Override
     public List<PaymentResponseDto> findAll() {

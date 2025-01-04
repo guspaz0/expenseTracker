@@ -15,8 +15,11 @@ public class WebClientConfig {
     //aqui se definen las variables de archivos properties definidas en /resources/configs
     //por ejemplo:
 
-    @Value(value="${api.base-url}")
-    private String baseUrl;
+    @Value(value="${api.base-urlCountries}")
+    private String baseUrlCountries;
+
+    @Value(value="${api.base-urlCurrency}")
+    private String baseUrlCurrency;
 
     @Value(value="${api.query1}")
     private String query1;
@@ -29,18 +32,18 @@ public class WebClientConfig {
 
 
 
-    @Bean(name="countries")
+    @Bean(name="countriesApi")
     public WebClient countriesWebClient(){
         return WebClient.builder()
-                .baseUrl(baseUrl+"?codes={whitelist}&fields={fields}")
+                .baseUrl(baseUrlCountries+"?codes={whitelist}&fields={fields}")
                 .defaultUriVariables(Map.of("whitelist",query1, "fields", query2))
                 .build();
     }
 
-    @Bean(name="currency")
+    @Bean(name="currencyApi")
     public WebClient currencyWebClient(){
         return WebClient.builder()
-                .baseUrl(baseUrl)
+                .baseUrl(baseUrlCurrency)
                 .build();
     }
 }

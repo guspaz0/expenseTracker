@@ -4,6 +4,7 @@ import com.henry.expenseTracker.infrastructure.dtos.CurrencyExchangeDto;
 import com.henry.expenseTracker.infrastructure.helpers.ApiCurrencyConnectorHelper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,12 +18,10 @@ import java.util.Currency;
 @Tag(name="Main")
 @Controller
 @RequestMapping("/")
+@AllArgsConstructor
 public class MainController {
-    private final ApiCurrencyConnectorHelper apiCurrency;
 
-    public MainController(ApiCurrencyConnectorHelper apiCurrency){
-        this.apiCurrency = apiCurrency;
-    }
+    private final ApiCurrencyConnectorHelper apiCurrency;
 
     @Operation(summary="Welcome message")
     @GetMapping("/api")
@@ -39,11 +38,11 @@ public class MainController {
     @Operation(summary = "Get exchange Rates")
     @RequestMapping(value = "/api/pair", method= RequestMethod.GET)
     public ResponseEntity<CurrencyExchangeDto> ExchangeRates(
-            @RequestParam String base,
-            @RequestParam String target) {
-        log.info(String.valueOf(Currency.getInstance(base)));
-        log.info(String.valueOf(Currency.getInstance(target)));
-        CurrencyExchangeDto exchangeData = this.apiCurrency.getExchangeRate(Currency.getInstance(base),Currency.getInstance(target));
+            @RequestParam Currency base,
+            @RequestParam Currency target) {
+        if(base == null) base = Currency.getInstance("USD");
+        if(target == null) target = Currency.getInstance("USD");
+        CurrencyExchangeDto exchangeData = this.apiCurrency.getExchangeRate(base,target);
         return ResponseEntity.ok().body(exchangeData);
     }
 }

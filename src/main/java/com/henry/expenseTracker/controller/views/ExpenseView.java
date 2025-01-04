@@ -10,6 +10,7 @@ import com.henry.expenseTracker.service.impl.ExpenseService;
 import com.henry.expenseTracker.service.impl.SupplierService;
 import com.henry.expenseTracker.service.impl.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +21,7 @@ import java.util.List;
 
 @Tag(name="Expense templates")
 @Controller
+@AllArgsConstructor
 @RequestMapping("/expense")
 public class ExpenseView {
     private final ExpenseService expenseService;
@@ -27,16 +29,6 @@ public class ExpenseView {
     private final UserService userService;
     private final CategoryService categoryService;
 
-    public ExpenseView(ExpenseService expenseService,
-                       SupplierService supplierService,
-                       UserService userService,
-                       CategoryService categoryService
-    ) {
-        this.expenseService = expenseService;
-        this.supplierService = supplierService;
-        this.userService = userService;
-        this.categoryService = categoryService;
-    }
     @SneakyThrows
     @PostMapping
     public String RegisterSave(Model model,

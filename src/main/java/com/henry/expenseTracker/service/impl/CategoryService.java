@@ -1,24 +1,20 @@
 package com.henry.expenseTracker.service.impl;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.henry.expenseTracker.Dto.request.CategoryRequestDto;
 import com.henry.expenseTracker.Dto.response.CategoryResponseDto;
 import com.henry.expenseTracker.entity.Category;
 import com.henry.expenseTracker.repository.CategoryRepository;
 import com.henry.expenseTracker.service.ICategoryService;
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class CategoryService implements ICategoryService {
+
     private final CategoryRepository categoryRepository;
-
-
-    public CategoryService(CategoryRepository categoryRepository){
-        this.categoryRepository = categoryRepository;
-    }
 
     @Override
     public List<CategoryResponseDto> findAll() {

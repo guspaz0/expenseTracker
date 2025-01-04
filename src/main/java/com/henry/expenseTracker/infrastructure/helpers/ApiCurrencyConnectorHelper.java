@@ -21,7 +21,7 @@ public class ApiCurrencyConnectorHelper {
     private String apiKey;
 
     @Autowired
-    public ApiCurrencyConnectorHelper(@Qualifier(value="currency") WebClient currencyWebClient) {
+    public ApiCurrencyConnectorHelper(@Qualifier(value="currencyApi") WebClient currencyWebClient) {
         this.currencyWebClient = currencyWebClient;
     }
 

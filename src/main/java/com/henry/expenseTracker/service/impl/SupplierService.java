@@ -7,18 +7,17 @@ import com.henry.expenseTracker.Dto.response.SupplierResponseDto;
 import com.henry.expenseTracker.entity.Supplier;
 import com.henry.expenseTracker.repository.SupplierRepository;
 import com.henry.expenseTracker.service.ISupplierService;
+import lombok.AllArgsConstructor;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class SupplierService implements ISupplierService {
-    private final SupplierRepository supplierRepository;
 
-    public SupplierService(SupplierRepository supplierRepository){
-        this.supplierRepository = supplierRepository;
-    }
+    private final SupplierRepository supplierRepository;
 
     @Override
     public List<SupplierResponseDto> findAll() {

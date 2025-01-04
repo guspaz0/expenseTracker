@@ -1,5 +1,6 @@
 package com.henry.expenseTracker.Dto.response;
 
+import com.henry.expenseTracker.entity.UserRole;
 import lombok.*;
 
 @Getter
@@ -11,5 +12,5 @@ public class UserResponseDto {
     private String email;
     private String country;
     private String currency;
-    private String userRole;
+    private UserRole userRole;
 }

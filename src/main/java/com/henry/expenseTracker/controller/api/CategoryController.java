@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.ErrorResponse;
@@ -20,13 +21,11 @@ import java.util.List;
 @Tag(name="Category")
 @Slf4j
 @RestController
+@AllArgsConstructor
 @RequestMapping("/api/category")
 public class CategoryController {
-    private final CategoryService categoryService;
 
-    public CategoryController(CategoryService categoryService){
-        this.categoryService = categoryService;
-    }
+    private final CategoryService categoryService;
 
     @Operation(summary="List all Categories")
     @GetMapping

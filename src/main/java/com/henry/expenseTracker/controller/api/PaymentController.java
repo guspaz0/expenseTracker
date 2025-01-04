@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.ErrorResponse;
@@ -21,15 +22,11 @@ import java.util.List;
 @Tag(name="Payments")
 @RestController
 @RequestMapping("/api/payment")
+@AllArgsConstructor
 public class PaymentController {
+
     private final PaymentService paymentService;
     private final UserService userService;
-
-
-    public PaymentController(PaymentService paymentService, UserService userService) {
-        this.paymentService = paymentService;
-        this.userService = userService;
-    }
 
     @Operation(summary="List all payments")
     @SneakyThrows

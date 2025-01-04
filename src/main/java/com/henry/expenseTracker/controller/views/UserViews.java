@@ -10,6 +10,7 @@ import com.henry.expenseTracker.infrastructure.helpers.ApiCountriesConnectorHelp
 import com.henry.expenseTracker.service.impl.ExpenseService;
 import com.henry.expenseTracker.service.impl.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -26,23 +27,15 @@ import java.util.Optional;
 @Tag(name="User Templates")
 @Slf4j
 @Controller
+@AllArgsConstructor
 @RequestMapping("/user")
 public class UserViews {
     private final ExpenseService expenseService;
     private final UserService userService;
-    private final ApiCountriesConnectorHelper apiCountries;
-
-    public UserViews(ExpenseService expenseService,
-                     UserService userService,
-                     ApiCountriesConnectorHelper apiCountries) {
-        this.expenseService = expenseService;
-        this.userService = userService;
-        this.apiCountries = apiCountries;
-    }
 
     @GetMapping("/register")
     public String Register(Model model) {
-        Map<String, List<?>> countriesInfo = apiCountries.getCountries();
+        Map<String, List<?>> countriesInfo = this.userService.getCountries();
         model.addAttribute("countries", countriesInfo.get("countries"));
         model.addAttribute("currencies", countriesInfo.get("currencies"));
         return "registerUser";

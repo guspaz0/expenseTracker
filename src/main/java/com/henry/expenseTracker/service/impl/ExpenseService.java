@@ -14,31 +14,25 @@ import com.henry.expenseTracker.exceptions.ExpenseException;
 import com.henry.expenseTracker.repository.ExpenseRepository;
 import com.henry.expenseTracker.repository.ExpirationRepository;
 import com.henry.expenseTracker.service.IExpenseService;
+import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.validator.constraints.Currency;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 @Transactional(propagation=Propagation.NESTED)
 @Slf4j
 @Service
+@AllArgsConstructor
 public class ExpenseService implements IExpenseService {
+
     private final ExpenseRepository expenseRepository;
     private final ExpirationRepository expirationRepository;
-    private final Jackson2ObjectMapperBuilder objectMapper = new Jackson2ObjectMapperBuilder();
-
-    public ExpenseService(ExpenseRepository expenseRepository,
-                          ExpirationRepository expirationRepository) {
-        this.expenseRepository = expenseRepository;
-        this.expirationRepository = expirationRepository;
-    }
 
     @Override
     public List<ExpenseResponseDto> findAll() {
@@ -47,7 +41,6 @@ public class ExpenseService implements IExpenseService {
                 .stream().map(this::mapToDTO)
                 .toList();
     }
-
 
     @Override
     public ExpenseResponseDto save(ExpenseRequestDto expenseRequestDto) {
