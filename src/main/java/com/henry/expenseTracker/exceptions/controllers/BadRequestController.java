@@ -17,12 +17,15 @@ import java.util.Map;
 @ResponseStatus(HttpStatus.BAD_REQUEST)
 public class BadRequestController {
 
+    private final String status = HttpStatus.BAD_REQUEST.name();
+    private final Integer statusCode = HttpStatus.BAD_REQUEST.value();
+
     @ExceptionHandler(PaymentException.class)
     public BaseErrorResponse handlePaymentException(PaymentException exception){
         return ErrorResponse.builder()
                 .message(exception.getMessage())
-                .status(HttpStatus.NOT_FOUND.name())
-                .statusCode(HttpStatus.NOT_FOUND.value())
+                .status(status)
+                .statusCode(statusCode)
                 .build();
     }
 
@@ -30,8 +33,8 @@ public class BadRequestController {
     public BaseErrorResponse handleExpenseException(ExpenseException exception){
         return ErrorResponse.builder()
                 .message(exception.getMessage())
-                .status(HttpStatus.NOT_FOUND.name())
-                .statusCode(HttpStatus.NOT_FOUND.value())
+                .status(status)
+                .statusCode(statusCode)
                 .build();
     }
 
@@ -42,8 +45,8 @@ public class BadRequestController {
                 .forEach(error->errors.add(error.getDefaultMessage()));
         return ErrorsResponse.builder()
                 .errors(errors)
-                .status(HttpStatus.NOT_FOUND.name())
-                .statusCode(HttpStatus.NOT_FOUND.value())
+                .status(status)
+                .statusCode(statusCode)
                 .build();
     }
 }

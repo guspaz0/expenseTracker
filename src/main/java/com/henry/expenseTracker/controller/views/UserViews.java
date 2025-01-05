@@ -5,33 +5,39 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.henry.expenseTracker.Dto.request.UserRequestDto;
 import com.henry.expenseTracker.Dto.response.UserResponseDto;
 import com.henry.expenseTracker.entity.User;
+import com.henry.expenseTracker.infrastructure.dtos.CountryDTO;
+import com.henry.expenseTracker.infrastructure.helpers.ApiCountriesConnectorHelper;
 import com.henry.expenseTracker.service.impl.ExpenseService;
 import com.henry.expenseTracker.service.impl.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 
 @Tag(name="User Templates")
+@Slf4j
 @Controller
+@AllArgsConstructor
 @RequestMapping("/user")
 public class UserViews {
     private final ExpenseService expenseService;
     private final UserService userService;
 
-    public UserViews(ExpenseService expenseService, UserService userService) {
-        this.expenseService = expenseService;
-        this.userService = userService;
-    }
-
     @GetMapping("/register")
     public String Register(Model model) {
+        Map<String, List<?>> countriesInfo = this.userService.getCountries();
+        model.addAttribute("countries", countriesInfo.get("countries"));
+        model.addAttribute("currencies", countriesInfo.get("currencies"));
         return "registerUser";
     }
     @SneakyThrows
@@ -39,12 +45,16 @@ public class UserViews {
     public String RegisterSave(Model model,
                                @RequestParam("username") String username,
                                @RequestParam("email") String email,
-                               @RequestParam("password") String password) {
+                               @RequestParam("password") String password,
+                               @RequestParam("country") String country,
+                               @RequestParam("currrency") String currrency) {
 
         UserRequestDto userRequestDto = UserRequestDto.builder()
                 .name(username)
                 .email(email)
                 .password(password)
+                .country(country)
+                .currency(currrency)
                 .build();
         UserResponseDto user = userService.save(userRequestDto);
         if (user != null) {

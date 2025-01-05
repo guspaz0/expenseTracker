@@ -6,6 +6,7 @@ import com.henry.expenseTracker.Dto.response.UserResponseDto;
 import com.henry.expenseTracker.service.impl.CategoryService;
 import com.henry.expenseTracker.service.impl.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,15 +16,11 @@ import java.util.Optional;
 
 @Tag(name="Category Templates")
 @Controller
+@AllArgsConstructor
 @RequestMapping("/category")
 public class CategoryView {
     private final CategoryService categoryService;
     private final UserService userService;
-
-    public CategoryView(CategoryService categoryService, UserService userService){
-        this.categoryService = categoryService;
-        this.userService = userService;
-    }
 
     @SneakyThrows
     @GetMapping

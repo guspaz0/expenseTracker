@@ -13,31 +13,25 @@ import com.henry.expenseTracker.entity.Supplier;
 import com.henry.expenseTracker.exceptions.ExpenseException;
 import com.henry.expenseTracker.repository.ExpenseRepository;
 import com.henry.expenseTracker.repository.ExpirationRepository;
-import com.henry.expenseTracker.service.IExpenseService;
-import jakarta.transaction.Transactional;
+import com.henry.expenseTracker.service.abstract_service.IExpenseService;
+import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-//@Transactional(propagation=Propagation.NESTED)
+@Transactional(propagation=Propagation.NESTED)
 @Slf4j
 @Service
+@AllArgsConstructor
 public class ExpenseService implements IExpenseService {
+
     private final ExpenseRepository expenseRepository;
     private final ExpirationRepository expirationRepository;
-    private final Jackson2ObjectMapperBuilder objectMapper = new Jackson2ObjectMapperBuilder();
-
-    public ExpenseService(ExpenseRepository expenseRepository,
-                          ExpirationRepository expirationRepository) {
-        this.expenseRepository = expenseRepository;
-        this.expirationRepository = expirationRepository;
-    }
 
     @Override
     public List<ExpenseResponseDto> findAll() {
@@ -46,7 +40,6 @@ public class ExpenseService implements IExpenseService {
                 .stream().map(this::mapToDTO)
                 .toList();
     }
-
 
     @Override
     public ExpenseResponseDto save(ExpenseRequestDto expenseRequestDto) {
@@ -109,6 +102,7 @@ public class ExpenseService implements IExpenseService {
                                 .id(expiration.getId())
                                 .expenseId(expiration.getExpenseId())
                                 .participation(expiration.getParticipation())
+                                .amount(expiration.getParticipation()*expense.getAmount())
                                 .expireDate(expiration.getExpireDate())
                                 .build())
                 .toList();
@@ -117,6 +111,7 @@ public class ExpenseService implements IExpenseService {
                 .description(expense.getDescription())
                 .emitDate(expense.getEmitDate())
                 .amount(expense.getAmount())
+                .currency(expense.getCurrency())
                 .category(
                     CategoryResponseDto.builder()
                         .id(expense.getCategory().getId())
@@ -144,9 +139,7 @@ public class ExpenseService implements IExpenseService {
                 .amount(expense.getAmount())
                 .category(
                         Category.builder()
-                                .id(expense.getCategory().getId())
-                                .name(expense.getCategory().getName())
-                                .description(expense.getCategory().getDescription())
+                                .id(expense.getCategory())
                                 .build()
                 )
                 .expires(expense.getExpires())
@@ -154,8 +147,7 @@ public class ExpenseService implements IExpenseService {
                         expense.getExpirations().stream().map(this::mapToEntity).toList())
                 .supplier(
                         Supplier.builder()
-                                .id(expense.getSupplier().getId())
-                                .name(expense.getSupplier().getName())
+                                .id(expense.getSupplier())
                                 .build()
                 )
                 .userId(expense.getUserId())

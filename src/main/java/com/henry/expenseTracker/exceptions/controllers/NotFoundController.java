@@ -9,13 +9,15 @@ import org.springframework.web.bind.annotation.*;
 @ResponseStatus(HttpStatus.NOT_FOUND)
 public class NotFoundController {
 
-    @ExceptionHandler(value = Exception.class)
+    private final String status = HttpStatus.NOT_FOUND.name();
+    private final Integer statusCode = HttpStatus.NOT_FOUND.value();
 
+    @ExceptionHandler(value = Exception.class)
     public @ResponseBody BaseErrorResponse handleException(Exception ex) {
         return ErrorResponse.builder()
                 .message(ex.getMessage())
-                .status(HttpStatus.NOT_FOUND.name())
-                .statusCode(HttpStatus.NOT_FOUND.value())
+                .status(status)
+                .statusCode(statusCode)
                 .build();
     }
 

@@ -1,6 +1,5 @@
 package com.henry.expenseTracker.service.impl;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.henry.expenseTracker.Dto.request.ExpirationPaymentRequestDto;
 import com.henry.expenseTracker.Dto.request.PaymentRequestDto;
 import com.henry.expenseTracker.Dto.response.ExpirationPaymentResponseDto;
@@ -11,8 +10,9 @@ import com.henry.expenseTracker.entity.Supplier;
 import com.henry.expenseTracker.exceptions.PaymentException;
 import com.henry.expenseTracker.repository.ExpirationPaymentsRepository;
 import com.henry.expenseTracker.repository.PaymentRepository;
-import com.henry.expenseTracker.service.IPaymentService;
-import jakarta.transaction.Transactional;
+import com.henry.expenseTracker.service.abstract_service.IPaymentService;
+import lombok.AllArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,19 +21,14 @@ import org.springframework.transaction.annotation.Propagation;
 import java.util.ArrayList;
 import java.util.List;
 
-//@Transactional(propagation= Propagation.NESTED)
+@Transactional(propagation= Propagation.NESTED)
 @Slf4j
 @Service
+@AllArgsConstructor
 public class PaymentService implements IPaymentService {
+
     private final PaymentRepository paymentRepository;
     private final ExpirationPaymentsRepository expirationPaymentsRepository;
-
-    public PaymentService(PaymentRepository paymentRepository,
-                          ExpirationPaymentsRepository expirationPayments,
-                          ObjectMapper objectMapper) {
-        this.paymentRepository = paymentRepository;
-        this.expirationPaymentsRepository = expirationPayments;
-    }
 
     @Override
     public List<PaymentResponseDto> findAll() {
@@ -120,6 +115,7 @@ public class PaymentService implements IPaymentService {
             throw new RuntimeException("La participacion del pago excede el monto disponible");
         }
     }
+
 
     private PaymentResponseDto mapToDTO(Payment payment) {
         return PaymentResponseDto.builder()

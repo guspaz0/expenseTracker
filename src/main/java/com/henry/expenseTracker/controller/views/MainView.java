@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpCookie;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Controller;
@@ -22,15 +23,10 @@ import java.util.Optional;
 
 @Tag(name="Main templates")
 @Controller
+@AllArgsConstructor
 @RequestMapping("/")
 public class MainView {
-    private final ObjectMapper objectMapper;
     private final UserService userService;
-
-    public MainView(ObjectMapper objectMapper, UserService userService){
-        this.objectMapper = objectMapper;
-        this.userService = userService;
-    }
 
     @GetMapping("/")
     public String mainPage(Model model) {

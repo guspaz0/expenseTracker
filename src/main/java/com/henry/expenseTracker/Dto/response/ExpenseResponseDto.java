@@ -4,6 +4,7 @@ import lombok.*;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Currency;
 import java.util.List;
 
 @Data
@@ -14,6 +15,7 @@ public class ExpenseResponseDto {
     private Long id;
     private String description;
     private Double amount;
+    private String currency;
     private LocalDate emitDate;
     private int expires;
     private CategoryResponseDto category;

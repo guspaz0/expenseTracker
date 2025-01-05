@@ -1,4 +1,4 @@
-package com.henry.expenseTracker.service;
+package com.henry.expenseTracker.service.abstract_service;
 
 import com.henry.expenseTracker.Dto.request.ExpenseRequestDto;
 import com.henry.expenseTracker.Dto.response.ExpenseResponseDto;

@@ -70,10 +70,10 @@ class ExpenseControllerIntegrationTest {
                 .description("Probando post expensas")
                 .emitDate(LocalDate.parse("2024-12-01"))
                 .amount(100.5)
-                .category(new Category(1L,null,null))
+                .category(1L)
                 .expires(0)
                 .expirations(expirationRequestDtoList)
-                .supplier(new Supplier(1L,null))
+                .supplier(1L)
                 .userId(1L)
                 .build();
 
@@ -102,12 +102,28 @@ class ExpenseControllerIntegrationTest {
     public void testSaveExpense() throws Exception {
 
         List<ExpirationResponseDto> expirationResponseDtoList = new ArrayList<>();
-        expirationResponseDtoList.add(new ExpirationResponseDto(1L,1L,LocalDate.parse("2024-12-30"),0.33));
-        expirationResponseDtoList.add(new ExpirationResponseDto(2L,1L,LocalDate.parse("2025-01-30"),0.33));
-        expirationResponseDtoList.add(new ExpirationResponseDto(3L,1L,LocalDate.parse("2025-02-28"),0.34));
+        expirationResponseDtoList.add(
+                ExpirationResponseDto.builder()
+                    .id(1L)
+                    .expenseId(1L)
+                    .expireDate(LocalDate.parse("2024-12-30"))
+                    .participation(0.33)
+                    .build());
+        expirationResponseDtoList.add(ExpirationResponseDto.builder()
+                .id(2L)
+                .expenseId(1L)
+                .expireDate(LocalDate.parse("2025-01-30"))
+                .participation(0.33)
+                .build());
+        expirationResponseDtoList.add(ExpirationResponseDto.builder()
+                .id(3L)
+                .expenseId(1L)
+                .expireDate(LocalDate.parse("2025-02-28"))
+                .participation(0.34)
+                .build());
 
         ExpenseResponseDto expenseResponseDto = new ExpenseResponseDto(
-            1L,"Probando post expensas",100.5,
+            1L,"Probando post expensas",100.5,"ARS",
             LocalDate.parse("2024-12-01"),1,
             new CategoryResponseDto(1L, null, null),
             new SupplierResponseDto(1L,null),
