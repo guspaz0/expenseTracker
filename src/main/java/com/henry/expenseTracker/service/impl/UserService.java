@@ -3,14 +3,11 @@ package com.henry.expenseTracker.service.impl;
 import com.henry.expenseTracker.Dto.request.UserRequestDto;
 import com.henry.expenseTracker.Dto.response.UserResponseDto;
 import com.henry.expenseTracker.entity.User;
-import com.henry.expenseTracker.infrastructure.dtos.CountryDTO;
 import com.henry.expenseTracker.infrastructure.helpers.ApiCountriesConnectorHelper;
-import com.henry.expenseTracker.infrastructure.helpers.EmailHelper;
 import com.henry.expenseTracker.repository.UserRepository;
-import com.henry.expenseTracker.service.IUserService;
+import com.henry.expenseTracker.service.abstract_service.IUserService;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

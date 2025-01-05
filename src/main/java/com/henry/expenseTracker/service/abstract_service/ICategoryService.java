@@ -1,8 +1,7 @@
-package com.henry.expenseTracker.service;
+package com.henry.expenseTracker.service.abstract_service;
 
 import com.henry.expenseTracker.Dto.request.CategoryRequestDto;
 import com.henry.expenseTracker.Dto.response.CategoryResponseDto;
-import lombok.SneakyThrows;
 
 import java.util.List;
 

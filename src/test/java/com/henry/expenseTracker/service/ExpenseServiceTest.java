@@ -5,10 +5,7 @@ import com.henry.expenseTracker.Dto.request.ExpirationRequestDto;
 import com.henry.expenseTracker.Dto.response.CategoryResponseDto;
 import com.henry.expenseTracker.Dto.response.ExpenseResponseDto;
 import com.henry.expenseTracker.Dto.response.SupplierResponseDto;
-import com.henry.expenseTracker.entity.Category;
-import com.henry.expenseTracker.entity.Expense;
-import com.henry.expenseTracker.entity.Supplier;
-import com.henry.expenseTracker.entity.User;
+import com.henry.expenseTracker.entity.*;
 import com.henry.expenseTracker.repository.*;
 import com.henry.expenseTracker.service.impl.ExpenseService;
 
@@ -54,7 +51,7 @@ public class ExpenseServiceTest {
 
         Supplier supplier = new Supplier(1L,"supplier de prueba");
         Category category = new Category(1L,"categoria de prueba","descripcion de prueba");
-        User user = new User(null,"Jhon Doe","jhon.doe@asd.com","1234");
+        User user = new User(null,"Jhon Doe","jhon.doe@asd.com","AR","ARS",UserRole.ROLE_ADMIN,"1234");
 
         sampleExpenseResponse = ExpenseResponseDto.builder()
                 .id(1L)
@@ -119,7 +116,7 @@ public class ExpenseServiceTest {
     void testFindByIdExpense() {
         Supplier supplier = new Supplier(1L,"supplier de prueba");
         Category category = new Category(1L,"categoria de prueba","descripcion de prueba");
-        User user = new User(null,"Jhon Doe","jhon.doe@asd.com","1234");
+        User user = new User(null,"Jhon Doe","jhon.doe@asd.com","AR","ARS", UserRole.ROLE_ADMIN,"1234");
 
         Expense expense = Expense.builder()
                 .id(1L)

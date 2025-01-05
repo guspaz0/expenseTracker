@@ -13,11 +13,10 @@ import com.henry.expenseTracker.entity.Supplier;
 import com.henry.expenseTracker.exceptions.ExpenseException;
 import com.henry.expenseTracker.repository.ExpenseRepository;
 import com.henry.expenseTracker.repository.ExpirationRepository;
-import com.henry.expenseTracker.service.IExpenseService;
+import com.henry.expenseTracker.service.abstract_service.IExpenseService;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -103,6 +102,7 @@ public class ExpenseService implements IExpenseService {
                                 .id(expiration.getId())
                                 .expenseId(expiration.getExpenseId())
                                 .participation(expiration.getParticipation())
+                                .amount(expiration.getParticipation()*expense.getAmount())
                                 .expireDate(expiration.getExpireDate())
                                 .build())
                 .toList();

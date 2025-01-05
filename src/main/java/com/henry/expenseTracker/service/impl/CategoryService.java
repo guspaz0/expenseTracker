@@ -4,7 +4,7 @@ import com.henry.expenseTracker.Dto.request.CategoryRequestDto;
 import com.henry.expenseTracker.Dto.response.CategoryResponseDto;
 import com.henry.expenseTracker.entity.Category;
 import com.henry.expenseTracker.repository.CategoryRepository;
-import com.henry.expenseTracker.service.ICategoryService;
+import com.henry.expenseTracker.service.abstract_service.ICategoryService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

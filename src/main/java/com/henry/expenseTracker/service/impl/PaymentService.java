@@ -1,6 +1,5 @@
 package com.henry.expenseTracker.service.impl;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.henry.expenseTracker.Dto.request.ExpirationPaymentRequestDto;
 import com.henry.expenseTracker.Dto.request.PaymentRequestDto;
 import com.henry.expenseTracker.Dto.response.ExpirationPaymentResponseDto;
@@ -9,11 +8,9 @@ import com.henry.expenseTracker.entity.ExpirationPayments;
 import com.henry.expenseTracker.entity.Payment;
 import com.henry.expenseTracker.entity.Supplier;
 import com.henry.expenseTracker.exceptions.PaymentException;
-import com.henry.expenseTracker.infrastructure.dtos.CurrencyExchangeDto;
-import com.henry.expenseTracker.infrastructure.helpers.ApiCurrencyConnectorHelper;
 import com.henry.expenseTracker.repository.ExpirationPaymentsRepository;
 import com.henry.expenseTracker.repository.PaymentRepository;
-import com.henry.expenseTracker.service.IPaymentService;
+import com.henry.expenseTracker.service.abstract_service.IPaymentService;
 import lombok.AllArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.SneakyThrows;
@@ -22,7 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 
 import java.util.ArrayList;
-import java.util.Currency;
 import java.util.List;
 
 @Transactional(propagation= Propagation.NESTED)

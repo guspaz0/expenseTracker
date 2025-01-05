@@ -16,4 +16,5 @@ public class ExpirationResponseDto {
     private Long expenseId;
     private LocalDate expireDate;
     private Double participation;
+    private Double amount;
 }
