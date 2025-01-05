@@ -8,21 +8,22 @@ import com.henry.expenseTracker.Dto.response.ExpirationResponseDto;
 import com.henry.expenseTracker.Dto.response.SupplierResponseDto;
 import com.henry.expenseTracker.entity.Category;
 import com.henry.expenseTracker.entity.Expense;
-import com.henry.expenseTracker.entity.Expiration;
 import com.henry.expenseTracker.entity.Supplier;
 import com.henry.expenseTracker.exceptions.ExpenseException;
 import com.henry.expenseTracker.repository.ExpenseRepository;
-import com.henry.expenseTracker.repository.ExpirationRepository;
 import com.henry.expenseTracker.service.abstract_service.IExpenseService;
+import com.henry.expenseTracker.util.constants.CacheConstants;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Transactional(propagation=Propagation.NESTED)
 @Slf4j
@@ -31,14 +32,16 @@ import java.util.List;
 public class ExpenseService implements IExpenseService {
 
     private final ExpenseRepository expenseRepository;
-    private final ExpirationRepository expirationRepository;
+    private final ExpirationsService expirationsService;
 
     @Override
+    @Cacheable(value= CacheConstants.EXPENSE_CACHE_NAME)
     public List<ExpenseResponseDto> findAll() {
         log.info("Listando todas las expensas");
+        // para simular un cuello de botella en la red
         return expenseRepository.findAll()
                 .stream().map(this::mapToDTO)
-                .toList();
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -48,19 +51,19 @@ public class ExpenseService implements IExpenseService {
             checkExpirations(expenseRequestDto.getExpirations());
             expenseRequestDto.setExpires(1);
         } else { expenseRequestDto.setExpires(0); }
-        Expense expense = mapToEntity(expenseRequestDto);
-        expense.setExpirations(new ArrayList<>());
-        expense = expenseRepository.save(expense);
-        Expense finalExpense = expense;
+        Expense expense = expenseRepository.save(mapToEntity(expenseRequestDto));
+        ExpenseResponseDto response = mapToDTO(expense);
         if (!expenseRequestDto.getExpirations().isEmpty()) {
-            log.info("{}",expenseRequestDto.getExpirations().toString());
-            finalExpense.setExpirations(expenseRequestDto.getExpirations()
-                    .stream().map(expiration -> {
-                        expiration.setExpenseId(finalExpense.getId());
-                        return expirationRepository.save(mapToEntity(expiration));
-                    }).toList());
+            response.setExpirations(
+                expenseRequestDto.getExpirations().stream().map(expiration-> {
+                    expiration.setExpenseId(expense.getId());
+                    var expirationResponse = expirationsService.save(expiration);
+                    expirationResponse.setAmount(expense.getAmount()*expiration.getParticipation());
+                    return expirationResponse;
+                }).toList()
+            );
         }
-        return mapToDTO(finalExpense);
+        return response;
     }
 
     @SneakyThrows
@@ -96,39 +99,43 @@ public class ExpenseService implements IExpenseService {
     }
 
     private ExpenseResponseDto mapToDTO(Expense expense) {
-        List<ExpirationResponseDto> expirationsList = expense.getExpirations()
-                .stream().map(expiration ->
-                        ExpirationResponseDto.builder()
-                                .id(expiration.getId())
-                                .expenseId(expiration.getExpenseId())
-                                .participation(expiration.getParticipation())
-                                .amount(expiration.getParticipation()*expense.getAmount())
-                                .expireDate(expiration.getExpireDate())
-                                .build())
-                .toList();
-        return ExpenseResponseDto.builder()
+        var response = ExpenseResponseDto.builder()
                 .id(expense.getId())
                 .description(expense.getDescription())
                 .emitDate(expense.getEmitDate())
                 .amount(expense.getAmount())
                 .currency(expense.getCurrency())
                 .category(
-                    CategoryResponseDto.builder()
-                        .id(expense.getCategory().getId())
-                        .name(expense.getCategory().getName())
-                        .description(expense.getCategory().getDescription())
-                        .build()
+                        CategoryResponseDto.builder()
+                                .id(expense.getCategory().getId())
+                                .name(expense.getCategory().getName())
+                                .description(expense.getCategory().getDescription())
+                                .build()
                 )
                 .expires(expense.getExpires())
-                .expirations(expirationsList)
                 .supplier(
-                    SupplierResponseDto.builder()
-                        .id(expense.getSupplier().getId())
-                        .name(expense.getSupplier().getName())
-                        .build()
+                        SupplierResponseDto.builder()
+                                .id(expense.getSupplier().getId())
+                                .name(expense.getSupplier().getName())
+                                .build()
                 )
                 .userId(expense.getUserId())
                 .build();
+        if (!expense.getExpirations().isEmpty()) {
+            response.setExpirations(
+                expense.getExpirations()
+                    .stream().map(expiration ->
+                            ExpirationResponseDto.builder()
+                                .id(expiration.getId())
+                                .expenseId(expiration.getExpenseId())
+                                .participation(expiration.getParticipation())
+                                .amount(expiration.getParticipation()*expense.getAmount())
+                                .expireDate(expiration.getExpireDate())
+                                .build())
+                    .toList()
+            );
+        }
+        return response;
     }
 
     private Expense mapToEntity(ExpenseRequestDto expense) {
@@ -143,8 +150,6 @@ public class ExpenseService implements IExpenseService {
                                 .build()
                 )
                 .expires(expense.getExpires())
-                .expirations(
-                        expense.getExpirations().stream().map(this::mapToEntity).toList())
                 .supplier(
                         Supplier.builder()
                                 .id(expense.getSupplier())
@@ -154,12 +159,4 @@ public class ExpenseService implements IExpenseService {
                 .build();
     }
 
-    private Expiration mapToEntity(ExpirationRequestDto expiration) {
-        return Expiration.builder()
-                .id(expiration.getId())
-                .expenseId(expiration.getExpenseId())
-                .participation(expiration.getParticipation())
-                .expireDate(expiration.getExpireDate())
-                .build();
-    }
 }

@@ -1,6 +1,7 @@
 package com.henry.expenseTracker.Dto.response;
 import lombok.*;
 
+import java.io.Serializable;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ExpenseResponseDto {
+public class ExpenseResponseDto implements Serializable {
     private Long id;
     private String description;
     private Double amount;

@@ -6,7 +6,9 @@ import com.henry.expenseTracker.Dto.response.SupplierResponseDto;
 import com.henry.expenseTracker.entity.Supplier;
 import com.henry.expenseTracker.repository.SupplierRepository;
 import com.henry.expenseTracker.service.abstract_service.ISupplierService;
+import com.henry.expenseTracker.util.constants.CacheConstants;
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,7 +20,14 @@ public class SupplierService implements ISupplierService {
     private final SupplierRepository supplierRepository;
 
     @Override
+    @Cacheable(value= CacheConstants.SUPPLIER_CACHE_NAME)
     public List<SupplierResponseDto> findAll() {
+        // para simular un cuello de botella en la red
+        try {
+            Thread.sleep(7000);
+        } catch(InterruptedException e){
+            throw new RuntimeException(e);
+        }
         return supplierRepository.findAll()
                 .stream().map(this::mapToDTO)
                 .toList();
