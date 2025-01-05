@@ -3,13 +3,13 @@ package com.henry.expenseTracker.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
+
 @Entity
 @Table(name = "category")
-@Getter
-@Setter
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
 @Builder
 public class Category {
     @Id

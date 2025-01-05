@@ -3,7 +3,8 @@ spring:
     name: ExpenseTracker
   datasource:
     driverClassName: org.h2.Driver
-    url: jdbc:h2:mem:~/db_expenses
+    # url: jdbc:h2:mem:~/db_expenses
+    url: jdbc:h2:tcp://localhost:1521/db_expenses
     username: sa
     password: test
     platform: h2
