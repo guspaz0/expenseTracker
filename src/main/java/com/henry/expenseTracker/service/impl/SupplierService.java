@@ -23,11 +23,11 @@ public class SupplierService implements ISupplierService {
     @Cacheable(value= CacheConstants.SUPPLIER_CACHE_NAME)
     public List<SupplierResponseDto> findAll() {
         // para simular un cuello de botella en la red
-        try {
-            Thread.sleep(7000);
-        } catch(InterruptedException e){
-            throw new RuntimeException(e);
-        }
+//        try {
+//            Thread.sleep(7000);
+//        } catch(InterruptedException e){
+//            throw new RuntimeException(e);
+//        }
         return supplierRepository.findAll()
                 .stream().map(this::mapToDTO)
                 .toList();
