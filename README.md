@@ -3,7 +3,7 @@
 #### Proyecto final Upskilling Backend Java
 
 ### Introduccion
-La app trata sobre registrar expensas y poder hacer un seguimiento de gastos. Esta orientado a multiusuario. Como toque personal, se le agregó funcionalidad para registrar pagos, vencimientos, exportacion de datos en excel y mucho mas.
+La app trata sobre registrar expensas y poder hacer un seguimiento de gastos. Esta orientado a multiusuario. Como toque personal, se le agregó funcionalidad para registrar pagos, vencimientos, exportacion de datos en excel, cache de base de datos y mucho mas.
 
 ### Modulos aplicados
 - Spring framework.
@@ -17,6 +17,7 @@ La app trata sobre registrar expensas y poder hacer un seguimiento de gastos. Es
 - OpenApi docs, Swagger.
 - Apache Poi
 - Docker
+- Redis
 
 ---
 
