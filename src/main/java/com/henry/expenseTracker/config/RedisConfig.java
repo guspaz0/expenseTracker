@@ -6,7 +6,6 @@ import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
 import org.redisson.spring.cache.CacheConfig;
 import org.redisson.spring.cache.RedissonSpringCacheManager;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
@@ -48,7 +47,6 @@ public class RedisConfig {
      * Con esta configuracion podemos habilitar las anotaciones de spring cache @Cacheable
      */
     @Bean
-    @Autowired
     public CacheManager cacheManager(RedissonClient redissonClient){
         var configs = Map.of(
                 CacheConstants.EXPENSE_CACHE_NAME, new CacheConfig(),
@@ -57,5 +55,18 @@ public class RedisConfig {
                 CacheConstants.EXPIRATIONS_CACHE_NAME, new CacheConfig()
         );
         return new RedissonSpringCacheManager(redissonClient, configs);
+    }
+
+    @CacheEvict(cacheNames = {
+            CacheConstants.EXPENSE_CACHE_NAME,
+            CacheConstants.CATEGORY_CACHE_NAME,
+            CacheConstants.SUPPLIER_CACHE_NAME,
+            CacheConstants.EXPIRATIONS_CACHE_NAME
+    }, allEntries = true)
+    @Scheduled(cron = CacheConstants.SCHEDULED_RESET_CACHE) // se borra cada media noche
+    @Async
+    public void deleteCache(){
+        log.info("Clean cache");
+
     }
 }

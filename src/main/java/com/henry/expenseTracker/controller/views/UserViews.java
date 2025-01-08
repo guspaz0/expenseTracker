@@ -4,9 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 //import com.henry.expenseTracker.dao.dto.ExpenseResponseDto;
 import com.henry.expenseTracker.Dto.request.UserRequestDto;
 import com.henry.expenseTracker.Dto.response.UserResponseDto;
-import com.henry.expenseTracker.entity.User;
-import com.henry.expenseTracker.infrastructure.dtos.CountryDTO;
-import com.henry.expenseTracker.infrastructure.helpers.ApiCountriesConnectorHelper;
 import com.henry.expenseTracker.service.impl.ExpenseService;
 import com.henry.expenseTracker.service.impl.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -16,12 +13,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 
 @Tag(name="User Templates")

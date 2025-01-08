@@ -2,8 +2,8 @@ package com.henry.expenseTracker.service.impl;
 
 import com.henry.expenseTracker.Dto.request.CategoryRequestDto;
 import com.henry.expenseTracker.Dto.response.CategoryResponseDto;
-import com.henry.expenseTracker.entity.Category;
-import com.henry.expenseTracker.repository.CategoryRepository;
+import com.henry.expenseTracker.entity.jpa.Category;
+import com.henry.expenseTracker.repository.jpa.CategoryRepository;
 import com.henry.expenseTracker.service.abstract_service.ICategoryService;
 import com.henry.expenseTracker.util.constants.CacheConstants;
 import lombok.AllArgsConstructor;

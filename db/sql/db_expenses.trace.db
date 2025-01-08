@@ -1,0 +1,33 @@
+2025-01-07 11:01:22.326000Z database: flush
+org.h2.message.DbException: General error: "org.h2.mvstore.MVStoreException: Could not truncate file /opt/h2-data/db_expenses.mv.db to size 32768 [2.2.224/2]" [50000-224]
+	at org.h2.message.DbException.get(DbException.java:212)
+	at org.h2.message.DbException.convert(DbException.java:407)
+	at org.h2.mvstore.db.Store.lambda$new$0(Store.java:122)
+	at org.h2.mvstore.MVStore.handleException(MVStore.java:1546)
+	at org.h2.mvstore.MVStore.panic(MVStore.java:371)
+	at org.h2.mvstore.FileStore.storeBuffer(FileStore.java:1527)
+	at org.h2.mvstore.FileStore.lambda$serializeAndStore$3(FileStore.java:1432)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+Caused by: org.h2.jdbc.JdbcSQLNonTransientException: General error: "org.h2.mvstore.MVStoreException: Could not truncate file /opt/h2-data/db_expenses.mv.db to size 32768 [2.2.224/2]" [50000-224]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:566)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
+	... 12 more
+Caused by: org.h2.mvstore.MVStoreException: Could not truncate file /opt/h2-data/db_expenses.mv.db to size 32768 [2.2.224/2]
+	at org.h2.mvstore.DataUtils.newMVStoreException(DataUtils.java:996)
+	at org.h2.mvstore.SingleFileStore.truncate(SingleFileStore.java:205)
+	at org.h2.mvstore.RandomAccessStore.shrinkIfPossible(RandomAccessStore.java:700)
+	at org.h2.mvstore.RandomAccessStore.shrinkStoreIfPossible(RandomAccessStore.java:680)
+	at org.h2.mvstore.RandomAccessStore.writeChunk(RandomAccessStore.java:377)
+	at org.h2.mvstore.RandomAccessStore.writeChunk(RandomAccessStore.java:28)
+	at org.h2.mvstore.FileStore.storeBuffer(FileStore.java:1524)
+	... 6 more
+Caused by: java.io.IOException: No such file or directory
+	at sun.nio.ch.FileDispatcherImpl.size0(Native Method)
+	at sun.nio.ch.FileDispatcherImpl.size(FileDispatcherImpl.java:84)
+	at sun.nio.ch.FileChannelImpl.truncate(FileChannelImpl.java:341)
+	at org.h2.mvstore.SingleFileStore.truncate(SingleFileStore.java:200)
+	... 11 more

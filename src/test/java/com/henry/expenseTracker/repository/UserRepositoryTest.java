@@ -1,7 +1,8 @@
 package com.henry.expenseTracker.repository;
 
-import com.henry.expenseTracker.entity.User;
-import com.henry.expenseTracker.entity.UserRole;
+import com.henry.expenseTracker.entity.jpa.User;
+import com.henry.expenseTracker.entity.jpa.UserRole;
+import com.henry.expenseTracker.repository.jpa.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

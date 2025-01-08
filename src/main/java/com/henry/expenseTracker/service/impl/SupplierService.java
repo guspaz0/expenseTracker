@@ -3,8 +3,8 @@ package com.henry.expenseTracker.service.impl;
 
 import com.henry.expenseTracker.Dto.request.SupplierRequestDto;
 import com.henry.expenseTracker.Dto.response.SupplierResponseDto;
-import com.henry.expenseTracker.entity.Supplier;
-import com.henry.expenseTracker.repository.SupplierRepository;
+import com.henry.expenseTracker.entity.jpa.Supplier;
+import com.henry.expenseTracker.repository.jpa.SupplierRepository;
 import com.henry.expenseTracker.service.abstract_service.ISupplierService;
 import com.henry.expenseTracker.util.constants.CacheConstants;
 import lombok.AllArgsConstructor;
@@ -23,11 +23,11 @@ public class SupplierService implements ISupplierService {
     @Cacheable(value= CacheConstants.SUPPLIER_CACHE_NAME)
     public List<SupplierResponseDto> findAll() {
         // para simular un cuello de botella en la red
-        try {
-            Thread.sleep(7000);
-        } catch(InterruptedException e){
-            throw new RuntimeException(e);
-        }
+//        try {
+//            Thread.sleep(7000);
+//        } catch(InterruptedException e){
+//            throw new RuntimeException(e);
+//        }
         return supplierRepository.findAll()
                 .stream().map(this::mapToDTO)
                 .toList();

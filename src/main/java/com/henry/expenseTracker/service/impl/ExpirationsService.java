@@ -2,10 +2,9 @@ package com.henry.expenseTracker.service.impl;
 
 import com.henry.expenseTracker.Dto.request.ExpirationRequestDto;
 import com.henry.expenseTracker.Dto.response.ExpirationResponseDto;
-import com.henry.expenseTracker.entity.Expense;
-import com.henry.expenseTracker.entity.Expiration;
-import com.henry.expenseTracker.repository.ExpenseRepository;
-import com.henry.expenseTracker.repository.ExpirationRepository;
+import com.henry.expenseTracker.entity.jpa.Expiration;
+import com.henry.expenseTracker.repository.jpa.ExpenseRepository;
+import com.henry.expenseTracker.repository.jpa.ExpirationRepository;
 import com.henry.expenseTracker.service.abstract_service.IExpirationsService;
 import com.henry.expenseTracker.util.constants.CacheConstants;
 import lombok.AllArgsConstructor;
@@ -15,7 +14,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Transactional(propagation= Propagation.NESTED)
 @Service

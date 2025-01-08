@@ -1,21 +1,20 @@
-package com.henry.expenseTracker.entity;
+package com.henry.expenseTracker.entity.jpa;
 
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.io.Serializable;
-
 @Entity
-@Table(name="suppliers")
-@Getter
-@Setter
-@ToString
+@Table(name = "category")
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
 @Builder
-public class Supplier {
+public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
+    private String description;
+
 }

@@ -6,11 +6,11 @@ import com.henry.expenseTracker.Dto.response.CategoryResponseDto;
 import com.henry.expenseTracker.Dto.response.ExpenseResponseDto;
 import com.henry.expenseTracker.Dto.response.ExpirationResponseDto;
 import com.henry.expenseTracker.Dto.response.SupplierResponseDto;
-import com.henry.expenseTracker.entity.Category;
-import com.henry.expenseTracker.entity.Expense;
-import com.henry.expenseTracker.entity.Supplier;
+import com.henry.expenseTracker.entity.jpa.Category;
+import com.henry.expenseTracker.entity.jpa.Expense;
+import com.henry.expenseTracker.entity.jpa.Supplier;
 import com.henry.expenseTracker.exceptions.ExpenseException;
-import com.henry.expenseTracker.repository.ExpenseRepository;
+import com.henry.expenseTracker.repository.jpa.ExpenseRepository;
 import com.henry.expenseTracker.service.abstract_service.IExpenseService;
 import com.henry.expenseTracker.util.constants.CacheConstants;
 import lombok.AllArgsConstructor;
@@ -21,7 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

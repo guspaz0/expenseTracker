@@ -2,9 +2,9 @@ package com.henry.expenseTracker.service.impl;
 
 import com.henry.expenseTracker.Dto.request.UserRequestDto;
 import com.henry.expenseTracker.Dto.response.UserResponseDto;
-import com.henry.expenseTracker.entity.User;
+import com.henry.expenseTracker.entity.jpa.User;
 import com.henry.expenseTracker.infrastructure.helpers.ApiCountriesConnectorHelper;
-import com.henry.expenseTracker.repository.UserRepository;
+import com.henry.expenseTracker.repository.jpa.UserRepository;
 import com.henry.expenseTracker.service.abstract_service.IUserService;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
