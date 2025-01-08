@@ -5,8 +5,9 @@ import com.henry.expenseTracker.Dto.request.ExpirationRequestDto;
 import com.henry.expenseTracker.Dto.response.CategoryResponseDto;
 import com.henry.expenseTracker.Dto.response.ExpenseResponseDto;
 import com.henry.expenseTracker.Dto.response.SupplierResponseDto;
-import com.henry.expenseTracker.entity.*;
-import com.henry.expenseTracker.repository.*;
+import com.henry.expenseTracker.entity.jpa.*;
+import com.henry.expenseTracker.repository.jpa.ExpenseRepository;
+import com.henry.expenseTracker.repository.jpa.ExpirationRepository;
 import com.henry.expenseTracker.service.impl.ExpenseService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +29,6 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.*;
 
 @Slf4j
 @ExtendWith(MockitoExtension.class)
@@ -51,7 +51,7 @@ public class ExpenseServiceTest {
 
         Supplier supplier = new Supplier(1L,"supplier de prueba");
         Category category = new Category(1L,"categoria de prueba","descripcion de prueba");
-        User user = new User(null,"Jhon Doe","jhon.doe@asd.com","AR","ARS",UserRole.ROLE_ADMIN,"1234");
+        User user = new User(null,"Jhon Doe","jhon.doe@asd.com","AR","ARS", UserRole.ROLE_ADMIN,"1234");
 
         sampleExpenseResponse = ExpenseResponseDto.builder()
                 .id(1L)

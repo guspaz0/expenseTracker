@@ -1,24 +1,18 @@
 package com.henry.expenseTracker.controller.views;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.henry.expenseTracker.Dto.response.UserResponseDto;
-import com.henry.expenseTracker.entity.User;
 import com.henry.expenseTracker.service.impl.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpCookie;
-import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 @Tag(name="Main templates")

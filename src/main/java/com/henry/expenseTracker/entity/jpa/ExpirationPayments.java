@@ -1,4 +1,4 @@
-package com.henry.expenseTracker.entity;
+package com.henry.expenseTracker.entity.jpa;
 
 import jakarta.persistence.*;
 import lombok.*;

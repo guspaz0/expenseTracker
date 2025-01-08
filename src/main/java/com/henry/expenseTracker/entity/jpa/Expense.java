@@ -1,10 +1,8 @@
-package com.henry.expenseTracker.entity;
+package com.henry.expenseTracker.entity.jpa;
 
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.io.Serializable;
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;

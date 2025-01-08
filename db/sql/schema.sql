@@ -44,7 +44,7 @@ create TABLE IF NOT exists expenses(
 	id identity primary key,
 	description varchar(128) not null,
 	amount decimal(10,2),
-	currency varchar(10) default('ARS'),
+	currency varchar(10) not null default('ARS'),
 	emit_date date NOT NULL DEFAULT(CURRENT_DATE),
 	supplier_id int NOT NULL,
 	user_id int NOT NULL,

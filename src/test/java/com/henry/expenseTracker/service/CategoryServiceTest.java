@@ -1,8 +1,8 @@
 package com.henry.expenseTracker.service;
 
 import com.henry.expenseTracker.Dto.response.CategoryResponseDto;
-import com.henry.expenseTracker.entity.Category;
-import com.henry.expenseTracker.repository.CategoryRepository;
+import com.henry.expenseTracker.entity.jpa.Category;
+import com.henry.expenseTracker.repository.jpa.CategoryRepository;
 import com.henry.expenseTracker.service.impl.CategoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;

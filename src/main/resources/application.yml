@@ -10,7 +10,7 @@ spring:
     platform: h2
   sql:
     init:
-      mode: always
+      mode: never
   h2:
     console:
       enabled: true
@@ -19,7 +19,15 @@ spring:
       ddl-auto: update
     show-sql: true
     dialect: org.hibernate.dialect.H2Dialect
-    defer-datasource-initialization: true
+    defer-datasource-initialization: false # true para que ejecute el data.sql
+  data:
+    mongodb:
+      authentication-database: admin
+      host: localhost
+      port: 27017
+      database: ${MONGO_DB}
+      username: ${MONGO_USER}
+      password: ${MONGO_PASSWORD}
   output:
     ansi:
       enabled: ALWAYS

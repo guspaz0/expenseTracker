@@ -3,7 +3,7 @@ package com.henry.expenseTracker.service.abstract_service;
 import com.henry.expenseTracker.Dto.request.ExpirationPaymentRequestDto;
 import com.henry.expenseTracker.Dto.request.PaymentRequestDto;
 import com.henry.expenseTracker.Dto.response.PaymentResponseDto;
-import com.henry.expenseTracker.entity.ExpirationPayments;
+import com.henry.expenseTracker.entity.jpa.ExpirationPayments;
 
 import java.util.List;
 

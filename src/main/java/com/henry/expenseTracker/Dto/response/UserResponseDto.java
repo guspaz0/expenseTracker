@@ -1,6 +1,6 @@
 package com.henry.expenseTracker.Dto.response;
 
-import com.henry.expenseTracker.entity.UserRole;
+import com.henry.expenseTracker.entity.jpa.UserRole;
 import lombok.*;
 
 @Getter
