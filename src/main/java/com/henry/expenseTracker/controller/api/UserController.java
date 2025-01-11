@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +20,7 @@ import java.util.List;
 
 @Tag(name="Users")
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/admin/user")
 @AllArgsConstructor
 public class UserController {
 
@@ -28,7 +29,8 @@ public class UserController {
     @Operation(summary="List all users")
     @GetMapping
     public ResponseEntity<List<UserResponseDto>> findAll() {
-
+        var authencation = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println(authencation.getAuthorities());
         return ResponseEntity.ok(userService.findAll());
     }
 

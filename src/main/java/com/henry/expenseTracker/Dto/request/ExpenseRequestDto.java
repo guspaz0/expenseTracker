@@ -22,6 +22,7 @@ public class ExpenseRequestDto {
     @Min(value = 1, message = "amount must be greater than 1")
     private Double amount;
 
+
     private String currency = "ARS";
 
     @NotNull

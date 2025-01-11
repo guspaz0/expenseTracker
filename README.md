@@ -18,6 +18,7 @@ La app trata sobre registrar expensas y poder hacer un seguimiento de gastos. Es
 - Apache Poi
 - Docker
 - Redis
+- MongoDb
 
 ---
 

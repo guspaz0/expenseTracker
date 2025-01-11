@@ -32,12 +32,12 @@ public class MainView {
 
         return "about";
     }
-    @GetMapping("/login")
+    @GetMapping("/view/login")
     public String loginPage(Model model) {
         return "login";
     }
 
-    @PostMapping("/login")
+    @PostMapping("/view/login")
     public String LoginRequestPage(Model model,
                                    @RequestParam("email") String email,
                                    @RequestParam("password") String password,

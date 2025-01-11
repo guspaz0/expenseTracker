@@ -15,36 +15,39 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Transactional(propagation= Propagation.NESTED)
+
 @Service
 @AllArgsConstructor
-@Cacheable()
 public class ExpirationsService implements IExpirationsService {
 
-    private static ExpenseRepository expenseRepository;
-    private static ExpirationRepository expirationRepository;
+    private final ExpenseRepository expenseRepository;
+    private final ExpirationRepository expirationRepository;
 
     @Override
     @Cacheable(value= CacheConstants.EXPIRATIONS_CACHE_NAME)
     public List<ExpirationResponseDto> findAllByExpenseId(Long Id) {
-        return expirationRepository.findByExpenseId(Id)
+        return this.expirationRepository.findByExpenseId(Id)
                 .stream().map(this::mapToDto)
                 .toList();
     }
 
     @Override
     public ExpirationResponseDto save(ExpirationRequestDto expiration) {
-        return mapToDto(expirationRepository.save(mapToEntity(expiration)));
+        return mapToDto(this.expirationRepository.save(mapToEntity(expiration)));
     }
 
     @Override
     public ExpirationResponseDto findById(Long id) throws Exception {
-        return null;
+        return mapToDto(this.expirationRepository.findById(id)
+                .orElseThrow(()-> new Exception("Expense id: "+id+" not found")));
     }
 
     @Override
     public String delete(Long id) throws Exception {
-        return "";
+        this.findById(id);
+        // checkear consistencia antes de borrar
+        //this.expirationRepository.deleteById(id);
+        return "not implemented";
     }
 
     @Override

@@ -5,6 +5,7 @@ import com.henry.expenseTracker.Dto.response.PaymentResponseDto;
 import com.henry.expenseTracker.exceptions.ErrorsResponse;
 import com.henry.expenseTracker.service.impl.PaymentService;
 import com.henry.expenseTracker.service.impl.UserService;
+import com.henry.expenseTracker.util.annotations.Notify;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -65,6 +66,7 @@ public class PaymentController {
     )
     @SneakyThrows
     @PostMapping
+    @Notify(value="Payment Notice")
     public ResponseEntity<PaymentResponseDto> save(@Valid @RequestBody PaymentRequestDto paymentRequest) {
         return ResponseEntity.ok(paymentService.save(paymentRequest));
     }

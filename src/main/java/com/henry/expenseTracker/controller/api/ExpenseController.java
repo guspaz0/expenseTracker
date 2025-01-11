@@ -27,7 +27,6 @@ public class ExpenseController {
     private final ExpenseService expenseService;
 
     public ExpenseController(ExpenseService expenseService) {
-
         this.expenseService = expenseService;
     }
 

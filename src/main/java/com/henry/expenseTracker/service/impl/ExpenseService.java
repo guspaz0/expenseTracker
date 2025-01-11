@@ -24,7 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Transactional(propagation=Propagation.NESTED)
 @Slf4j
 @Service
 @AllArgsConstructor
@@ -34,11 +33,11 @@ public class ExpenseService implements IExpenseService {
     private final ExpirationsService expirationsService;
 
     @Override
-    @Cacheable(value= CacheConstants.EXPENSE_CACHE_NAME)
+    //@Cacheable(value= CacheConstants.EXPENSE_CACHE_NAME)
     public List<ExpenseResponseDto> findAll() {
         log.info("Listando todas las expensas");
-        // para simular un cuello de botella en la red
-        return expenseRepository.findAll()
+        var expenses = this.expenseRepository.findAll();
+        return expenses
                 .stream().map(this::mapToDTO)
                 .collect(Collectors.toList());
     }
@@ -50,13 +49,16 @@ public class ExpenseService implements IExpenseService {
             checkExpirations(expenseRequestDto.getExpirations());
             expenseRequestDto.setExpires(1);
         } else { expenseRequestDto.setExpires(0); }
-        Expense expense = expenseRepository.save(mapToEntity(expenseRequestDto));
+        log.info("pasa por linea 53");
+        Expense expense = this.expenseRepository.save(mapToEntity(expenseRequestDto));
+        log.info("pasa por linea 55");
         ExpenseResponseDto response = mapToDTO(expense);
         if (!expenseRequestDto.getExpirations().isEmpty()) {
+            log.info("entra por el if");
             response.setExpirations(
                 expenseRequestDto.getExpirations().stream().map(expiration-> {
                     expiration.setExpenseId(expense.getId());
-                    var expirationResponse = expirationsService.save(expiration);
+                    var expirationResponse = this.expirationsService.save(expiration);
                     expirationResponse.setAmount(expense.getAmount()*expiration.getParticipation());
                     return expirationResponse;
                 }).toList()
@@ -120,7 +122,7 @@ public class ExpenseService implements IExpenseService {
                 )
                 .userId(expense.getUserId())
                 .build();
-        if (!expense.getExpirations().isEmpty()) {
+        if (expense.getExpirations() != null) {
             response.setExpirations(
                 expense.getExpirations()
                     .stream().map(expiration ->
@@ -143,6 +145,7 @@ public class ExpenseService implements IExpenseService {
                 .description(expense.getDescription())
                 .emitDate(expense.getEmitDate())
                 .amount(expense.getAmount())
+                .currency(expense.getCurrency())
                 .category(
                         Category.builder()
                                 .id(expense.getCategory())
