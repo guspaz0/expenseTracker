@@ -1,14 +1,11 @@
 package com.henry.expenseTracker.Dto.request;
 
-import com.henry.expenseTracker.entity.Category;
-import com.henry.expenseTracker.entity.Supplier;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,11 +22,14 @@ public class ExpenseRequestDto {
     @Min(value = 1, message = "amount must be greater than 1")
     private Double amount;
 
+
+    private String currency = "ARS";
+
     @NotNull
     private LocalDate emitDate;
 
     @NotNull
-    private Category category;
+    private Long category;
 
     @Min(value = 0, message = "amount is binary value(1 or 0)")
     @Max(value = 1, message = "amount is binary value(1 or 0)")
@@ -38,9 +38,10 @@ public class ExpenseRequestDto {
     private List<ExpirationRequestDto> expirations = new ArrayList<>();
 
     @NotNull
-    private Supplier supplier;
+    private Long supplier;
 
     @NotNull
+    @Min(value=1)
     private Long userId;
 
 }

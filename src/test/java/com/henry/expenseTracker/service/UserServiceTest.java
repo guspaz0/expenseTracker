@@ -2,8 +2,8 @@ package com.henry.expenseTracker.service;
 
 import com.henry.expenseTracker.Dto.request.UserRequestDto;
 import com.henry.expenseTracker.Dto.response.UserResponseDto;
-import com.henry.expenseTracker.entity.User;
-import com.henry.expenseTracker.repository.UserRepository;
+import com.henry.expenseTracker.entity.jpa.User;
+import com.henry.expenseTracker.repository.jpa.UserRepository;
 import com.henry.expenseTracker.service.impl.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

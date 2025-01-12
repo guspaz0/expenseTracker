@@ -5,11 +5,9 @@ import com.henry.expenseTracker.Dto.request.ExpirationRequestDto;
 import com.henry.expenseTracker.Dto.response.CategoryResponseDto;
 import com.henry.expenseTracker.Dto.response.ExpenseResponseDto;
 import com.henry.expenseTracker.Dto.response.SupplierResponseDto;
-import com.henry.expenseTracker.entity.Category;
-import com.henry.expenseTracker.entity.Expense;
-import com.henry.expenseTracker.entity.Supplier;
-import com.henry.expenseTracker.entity.User;
-import com.henry.expenseTracker.repository.*;
+import com.henry.expenseTracker.entity.jpa.*;
+import com.henry.expenseTracker.repository.jpa.ExpenseRepository;
+import com.henry.expenseTracker.repository.jpa.ExpirationRepository;
 import com.henry.expenseTracker.service.impl.ExpenseService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +29,6 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.*;
 
 @Slf4j
 @ExtendWith(MockitoExtension.class)
@@ -54,13 +51,14 @@ public class ExpenseServiceTest {
 
         Supplier supplier = new Supplier(1L,"supplier de prueba");
         Category category = new Category(1L,"categoria de prueba","descripcion de prueba");
-        User user = new User(null,"Jhon Doe","jhon.doe@asd.com","1234");
+        User user = new User(null,"Jhon Doe","jhon.doe@asd.com","AR","ARS", UserRole.ROLE_ADMIN,"1234");
 
         sampleExpenseResponse = ExpenseResponseDto.builder()
                 .id(1L)
                 .description("testing expenses")
                 .emitDate(LocalDate.parse("2024-12-31"))
                 .amount(100.5)
+                .currency("ARS")
                 .category(new CategoryResponseDto(1L,null,null))
                 .expires(0)
                 .expirations(new ArrayList<>())
@@ -77,10 +75,11 @@ public class ExpenseServiceTest {
                 .description("Probando post expensas")
                 .emitDate(LocalDate.parse("2024-12-01"))
                 .amount(100.5)
-                .category(category)
+                .currency("ARS")
+                .category(category.getId())
                 .expires(0)
                 .expirations(expirationRequestDtoList)
-                .supplier(supplier)
+                .supplier(supplier.getId())
                 .userId(1L)
                 .build();
 
@@ -94,6 +93,7 @@ public class ExpenseServiceTest {
                 .id(null)
                 .description("Probando post expensas")
                 .amount(100.5)
+                .currency("ARS")
                 .emitDate(LocalDate.parse("2024-12-01"))
                 .category(new Category(1L,null,null))
                 .supplier(new Supplier(1L, null))
@@ -116,12 +116,13 @@ public class ExpenseServiceTest {
     void testFindByIdExpense() {
         Supplier supplier = new Supplier(1L,"supplier de prueba");
         Category category = new Category(1L,"categoria de prueba","descripcion de prueba");
-        User user = new User(null,"Jhon Doe","jhon.doe@asd.com","1234");
+        User user = new User(null,"Jhon Doe","jhon.doe@asd.com","AR","ARS", UserRole.ROLE_ADMIN,"1234");
 
         Expense expense = Expense.builder()
                 .id(1L)
                 .description("Probando post expensas")
                 .amount(100.5)
+                .currency("ARS")
                 .emitDate(LocalDate.parse("2024-12-01"))
                 .category(category)
                 .supplier(supplier)

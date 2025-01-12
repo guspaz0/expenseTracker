@@ -1,15 +1,34 @@
 services:
-  db-expenses:
-    container_name: com.henry.expenseTracker.db-expense-tracker
+  sql-db:
+    container_name: db-expense-tracker
     build:
       dockerfile: ./Dockerfile
       context: ./
     image: h2-alpine
     restart: always
     volumes:
-     - ${SRC_DIRECTORY}/schema.sql:/opt/h2-data/schema.sql
+     - ./db/sql/:/opt/h2-data/
     ports:
       - 81:81
       - 1521:1521
     environment:
       H2_OPTIONS: -ifNotExists
+  cache-db:
+    image: redis:6.2-alpine
+    container_name: expense_tracker_cache
+    restart: always
+    ports:
+      - 6379:6379
+    command: redis-server --loglevel warning --requirepass ${REDIS_PASSWORD}
+  document-db:
+    image: mongo:6.0.4
+    restart: always
+    container_name: expense_tracker_users
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_DB}
+    ports:
+      - 27017:27017
+    volumes:
+      - ./db/mongo/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro

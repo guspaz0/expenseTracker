@@ -1,6 +1,8 @@
 package com.henry.expenseTracker.repository;
 
-import com.henry.expenseTracker.entity.User;
+import com.henry.expenseTracker.entity.jpa.User;
+import com.henry.expenseTracker.entity.jpa.UserRole;
+import com.henry.expenseTracker.repository.jpa.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,6 +28,9 @@ public class UserRepositoryTest {
                 .name("jhon Doe")
                 .email("jhon.doe@gmail.com")
                 .password("1234")
+                .userRole(UserRole.ROLE_ADMIN)
+                .currency("ARS")
+                .country("AR")
                 .build();
     }
 
@@ -50,6 +55,9 @@ public class UserRepositoryTest {
                 .name("Juan Carlos")
                 .email("juan.carlos@gmail.com")
                 .password("1234")
+                .userRole(UserRole.ROLE_ADMIN)
+                .currency("ARS")
+                .country("AR")
                 .build();
         userRepository.save(sampleUser2);
         userRepository.save(sampleUser);

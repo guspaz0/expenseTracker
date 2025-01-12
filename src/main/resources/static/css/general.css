@@ -126,3 +126,9 @@ ul {
     gap: 5px
  }
 
+@viewport (width > 360 ) {
+
+    .registerUser {
+        max-width: 500px
+    }
+}
