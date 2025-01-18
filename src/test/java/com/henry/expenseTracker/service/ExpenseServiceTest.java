@@ -10,7 +10,11 @@ import com.henry.expenseTracker.repository.jpa.ExpenseRepository;
 import com.henry.expenseTracker.repository.jpa.ExpirationRepository;
 import com.henry.expenseTracker.service.impl.ExpenseService;
 
+import com.henry.expenseTracker.util.constants.SortType;
+import com.henry.expenseTracker.util.constants.UserRole;
+import com.jayway.jsonpath.internal.Utils;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,9 +30,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
+
 
 @Slf4j
 @ExtendWith(MockitoExtension.class)
@@ -36,8 +42,9 @@ public class ExpenseServiceTest {
 
     @Mock
     private ExpenseRepository expenseRepository;
+
     @Mock
-    private ExpirationRepository expirationRepository;
+    private Utils utils;
 
     @InjectMocks
     private ExpenseService expenseService; /* = new ExpenseService(expenseRepository, expirationRepository, objectMapper);*/
@@ -89,22 +96,25 @@ public class ExpenseServiceTest {
     @Test
     void testListAllExpenses() {
 
+
         Expense expense = Expense.builder()
                 .id(null)
                 .description("Probando post expensas")
                 .amount(100.5)
                 .currency("ARS")
                 .emitDate(LocalDate.parse("2024-12-01"))
-                .category(new Category(1L,null,null))
-                .supplier(new Supplier(1L, null))
+                .category(new Category(1L,"categoria de prueba","descripcion de prueba"))
+                .supplier(new Supplier(1L,"supplier de prueba"))
                 .userId(1L)
                 .expires(0)
                 .expirations(new ArrayList<>())
                 .build();
 
+
         given(expenseRepository.findAll())
-                .willReturn(List.of(expense,expense));
-        List<ExpenseResponseDto> expenseList = expenseService.findAll();
+                .willReturn(List.of(expense, expense));
+
+        List<ExpenseResponseDto> expenseList = expenseService.findAll(0,2, SortType.LOWER);
 
         assertThat(expenseList).isNotNull();
         assertThat(expenseList.size()).isEqualTo(2);

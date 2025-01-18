@@ -66,8 +66,8 @@ public class AppUserService implements ModifyUserService, UserDetailsService {
     }
 
     private static UserDetails mapUserToUserDetails(AppUserDocument user){
-        Set<GrantedAuthority> authorities = user.getRole().
-                getGrantedAuthorities()
+        Set<GrantedAuthority> authorities = user.getRole()
+                .getGrantedAuthorities()
                 .stream()
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toSet());

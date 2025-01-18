@@ -13,10 +13,14 @@ import com.henry.expenseTracker.exceptions.ExpenseException;
 import com.henry.expenseTracker.repository.jpa.ExpenseRepository;
 import com.henry.expenseTracker.service.abstract_service.IExpenseService;
 import com.henry.expenseTracker.util.constants.CacheConstants;
+import com.henry.expenseTracker.util.constants.SortType;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,12 +38,20 @@ public class ExpenseService implements IExpenseService {
 
     @Override
     //@Cacheable(value= CacheConstants.EXPENSE_CACHE_NAME)
-    public List<ExpenseResponseDto> findAll() {
+    public List<ExpenseResponseDto> findAll(Integer page, Integer size, SortType sortType) {
         log.info("Listando todas las expensas");
-        var expenses = this.expenseRepository.findAll();
-        return expenses
-                .stream().map(this::mapToDTO)
-                .collect(Collectors.toList());
+        //var pagination = pageRequest(page, size, sortType);
+        //log.info(pagination.toString());
+        return this.expenseRepository.findAll().stream()
+                .map(this::mapToDTO).toList();
+    }
+
+    private PageRequest pageRequest(Integer page, Integer size, SortType sortType) {
+        return switch (sortType) {
+            case NONE -> PageRequest.of(page, size);
+            case LOWER -> PageRequest.of(page,size, Sort.by(FIELD_BY_SORT).ascending());
+            case UPPER -> PageRequest.of(page,size, Sort.by(FIELD_BY_SORT).descending());
+        };
     }
 
     @Override

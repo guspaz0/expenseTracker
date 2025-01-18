@@ -5,6 +5,7 @@ import com.henry.expenseTracker.Dto.response.ExpenseResponseDto;
 import com.henry.expenseTracker.exceptions.ErrorResponse;
 import com.henry.expenseTracker.exceptions.ErrorsResponse;
 import com.henry.expenseTracker.service.impl.ExpenseService;
+import com.henry.expenseTracker.util.constants.SortType;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -15,6 +16,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,8 +34,15 @@ public class ExpenseController {
 
     @Operation(summary="List all expenses")
     @GetMapping
-    public ResponseEntity<List<ExpenseResponseDto>> findAll() {
-        return ResponseEntity.ok(expenseService.findAll());
+    public ResponseEntity<List<ExpenseResponseDto>> findAll(
+        @RequestParam(required = false, defaultValue = "1") String page,
+        @RequestParam(required = false, defaultValue = "100") String size,
+        @RequestHeader(required=false, defaultValue = "NONE") SortType sortType
+    ) {
+        var authencation = SecurityContextHolder.getContext().getAuthentication();
+        log.info("Authentication: "+ authencation.toString());
+        return ResponseEntity.ok(expenseService.findAll(
+                Integer.parseInt(page), Integer.parseInt(size), sortType));
     }
 
     @Operation(summary="List expense indentified by id params")

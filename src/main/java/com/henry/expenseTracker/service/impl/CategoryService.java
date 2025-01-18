@@ -23,11 +23,11 @@ public class CategoryService implements ICategoryService {
     public List<CategoryResponseDto> findAll() {
         // para simular un cuello de botella en la red en la primer llamada,
         // despues en la segunda llamada responde en el instante con datos de la cache
-        try {
-            Thread.sleep(7000);
-        } catch(InterruptedException e){
-            throw new RuntimeException(e);
-        }
+//        try {
+//            Thread.sleep(7000);
+//        } catch(InterruptedException e){
+//            throw new RuntimeException(e);
+//        }
         return categoryRepository.findAll()
                 .stream().map(this::mapToDTO)
                 .toList();

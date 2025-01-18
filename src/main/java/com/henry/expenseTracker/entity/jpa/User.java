@@ -1,5 +1,6 @@
 package com.henry.expenseTracker.entity.jpa;
 
+import com.henry.expenseTracker.util.constants.UserRole;
 import jakarta.persistence.*;
 import lombok.*;
 

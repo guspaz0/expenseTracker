@@ -2,28 +2,33 @@ spring:
   application:
     name: ExpenseTracker
   datasource:
-    driverClassName: org.h2.Driver
+    # driverClassName: org.h2.Driver
     # url: jdbc:h2:mem:~/db_expenses
-    url: jdbc:h2:tcp://localhost:1521/db_expenses
-    username: sa
-    password: test
-    platform: h2
+    # url: jdbc:h2:tcp://localhost:1521/db_expenses
+    # platform: h2
+    url: ${POSTGRES_DB}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+    hikari:
+      connection-timeout: 20000
+      maximum-pool-size: 5
   sql:
     init:
       mode: never
-  h2:
-    console:
-      enabled: true
+#  h2:
+#    console:
+#      enabled: true
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
-    dialect: org.hibernate.dialect.H2Dialect
+    #dialect: org.hibernate.dialect.H2Dialect
+    dialect: org.hibernate.dialect.PostgreSQLDialect
     defer-datasource-initialization: false # true para que ejecute el data.sql
   data:
     mongodb:
       authentication-database: admin
-      host: localhost
+      host: ${MONGO_HOST}
       port: 27017
       database: ${MONGO_DB}
       username: ${MONGO_USER}

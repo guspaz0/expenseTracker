@@ -17,4 +17,6 @@ public interface IExpirationsService {
     String delete(Long id) throws Exception;
 
     ExpirationResponseDto update(ExpirationRequestDto expense) throws Exception;
+
+    String FIELD_BY_SORT = "expiration";
 }

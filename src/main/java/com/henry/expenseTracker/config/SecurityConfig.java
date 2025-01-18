@@ -32,6 +32,7 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
+import org.springframework.web.cors.CorsConfiguration;
 
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -50,10 +51,12 @@ public class SecurityConfig {
     private String clientId;
     @Value(value= "${app.client.secret}")
     private String clientSecret;
-    @Value(value= "${app.client-scope-read}")
-    private String scopeRead;
-    @Value(value= "${app.client-scope-write}")
-    private String scopeWrite;
+    @Value(value= "${app.client-scope-client}")
+    private String scopeClient;
+    @Value(value= "${app.client-scope-admin}")
+    private String scopeAdmin;
+    @Value(value= "${app.client-scope-employee}")
+    private String scopeEmployee;
     @Value(value= "${app.client-redirect-debugger}")
     private String redirectUri1;
     @Value(value= "${app.client-redirect-spring-doc}")
@@ -72,6 +75,15 @@ public class SecurityConfig {
 
         http.getConfigurer(OAuth2AuthorizationServerConfigurer.class)
                 .oidc(Customizer.withDefaults());
+        http.cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(request -> {
+            CorsConfiguration configuration = new CorsConfiguration();
+            configuration.addAllowedMethod("POST");
+            configuration.addAllowedMethod("OPTIONS");
+            configuration.addAllowedHeader("*");
+            configuration.addAllowedOrigin("*");
+
+            return configuration;
+        }));
         http.exceptionHandling(e -> e.authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint(LOGIN_RESOURCE)));
         return http.build();
     }
@@ -85,8 +97,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests()
                 .requestMatchers(PUBLIC_RESOURCES)
                 .permitAll()
-                .requestMatchers(USER_RESOURCES)
+                .requestMatchers(CLIENT_RESOURCES)
                 .authenticated()
+                .requestMatchers(EMPLOYEE_RESOURCES)
+                .hasAuthority(ROLE_EMPLOYEE)
                 .requestMatchers(ADMIN_RESOURCES)
                 .hasAuthority(ROLE_ADMIN)
                 .and()
@@ -122,8 +136,9 @@ public class SecurityConfig {
         var registeredClient = RegisteredClient.withId(UUID.randomUUID().toString())
                 .clientId(clientId)
                 .clientSecret(encoder.encode(clientSecret))
-                .scope(scopeRead)
-                .scope(scopeWrite)
+                .scope(scopeAdmin)
+                .scope(scopeClient)
+                .scope(scopeAdmin)
                 .redirectUri(redirectUri1)
                 .redirectUri(redirectUri2)
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
@@ -214,13 +229,15 @@ public class SecurityConfig {
                 .build();
     }
 
-    private static final String[] PUBLIC_RESOURCES = {"/swagger-ui/**", "/v3/api-docs/**", "/.well-known/**", "/report/**", "/","/css/**","/login" };
-    private static final String[] USER_RESOURCES = {"/api/**"};
-    private static final String[] ADMIN_RESOURCES = {"/admin/user/**"};
+    private static final String[] PUBLIC_RESOURCES = {"/swagger-ui/**", "/v3/api-docs/**", "/.well-known/**", "/report/**", "/","/css/**","/login", "/api/expense/**","/oauth2/**" };
+    private static final String[] CLIENT_RESOURCES = {"/api/expenses"};
+    private static final String[] EMPLOYEE_RESOURCES = {"/api/expenses/**", "/api/supplier/**", "/api/user/**"};
+    private static final String[] ADMIN_RESOURCES = {"/**"};
     private static final String LOGIN_RESOURCE = "/login";
     private static final String AUTH_WRITE = "write";
     private static final String AUTH_READ = "read";
-    private static final String ROLE_ADMIN = "write";
-    private static final String ROLE_USER = "USER";
+    private static final String ROLE_EMPLOYEE = "employee";
+    private static final String ROLE_ADMIN = "admin";
+    private static final String ROLE_CLIENT = "client";
     private static final String APP_NAME = "expense_tracker";
 }

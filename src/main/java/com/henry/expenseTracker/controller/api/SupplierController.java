@@ -31,6 +31,7 @@ public class SupplierController {
     @Operation(summary="List all suppliers")
     @GetMapping
     public ResponseEntity<List<SupplierResponseDto>> findAll() {
+
         return ResponseEntity.ok(supplierService.findAll());
     }
 

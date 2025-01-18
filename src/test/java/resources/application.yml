@@ -1,0 +1,14 @@
+server:
+  servlet.context-path: /
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/db_expenses
+    username: gusta
+    password: probando2025
+    hikari:
+      connection-timeout: 20000
+      maximum-pool-size: 5
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE

@@ -5,6 +5,7 @@ import com.henry.expenseTracker.Dto.response.ExpenseResponseDto;
 import com.henry.expenseTracker.Dto.response.ExpirationResponseDto;
 import com.henry.expenseTracker.Dto.response.SupplierResponseDto;
 import com.henry.expenseTracker.service.abstract_service.ReportService;
+import com.henry.expenseTracker.util.constants.SortType;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -140,7 +141,7 @@ public class ExcelService implements ReportService {
         var style = workBook.createCellStyle();
         style.setWrapText(true);
 
-        var expenses = this.expenseService.findAll();
+        var expenses = this.expenseService.findAll(1,999, SortType.LOWER);
 
         var rowPos = 1;
         var rowPos2 = 1;
